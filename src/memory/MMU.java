@@ -49,8 +49,7 @@ public class MMU  {
     }
 
     public int readWord(int address) {
-        return 0;
-
+        return readByte(address) + readByte(address+1) << 8;
     }
 
     public void writeWord(int address, int value) {

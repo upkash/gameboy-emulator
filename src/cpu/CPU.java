@@ -14,7 +14,6 @@ public class CPU {
     private final Register E;
     private final Register H;
     private final Register L;
-    private final Register F;
     private final Register sp;
     private final Register pc;
     private final RegisterPair BC;
@@ -28,7 +27,7 @@ public class CPU {
     private boolean zero;
 
     // memory
-    MMU mmu;
+    private final MMU mmu;
 
     public CPU () {
         A = new Register();
@@ -38,12 +37,12 @@ public class CPU {
         E = new Register();
         H = new Register();
         L = new Register();
-        F = new Register();
         sp = new Register();
         pc = new Register();
         BC = new RegisterPair(B, C);
         DE = new RegisterPair(D, E);
         HL = new RegisterPair(H, L);
+        mmu = new MMU();
     }
     private void add(Register dst, Register src, int carry){
         int val = dst.read() + src.read() + carry;
@@ -52,7 +51,12 @@ public class CPU {
         this.carry = val > 255;
         dst.set(val & 255);
     }
-    private void add_ind(Register dst, RegisterPair source, boolean carry){
+    private void add_ind(Register dst, RegisterPair src, int carry){
+        int val = dst.read() + mmu.readByte(src.read()) + carry;
+        zero = val == 0;
+        operation = false;
+        this.carry = val > 255;
+        dst.set(val & 255);
     }
 
     private void sub(Register dst, Register src, int carry){
@@ -70,21 +74,29 @@ public class CPU {
         dst.set(src.read());
     }
 
-    private void load(Register dst, int imm) {
-        dst.set(imm);
-    }
-    private void load_ind(Register dst, RegisterPair src) {
+
+    private void load(RegisterPair dst, int loc) {
+        dst.set(mmu.readWord(loc));
     }
 
-    private void load_ind(Register dst, int loc) {
+    private void load(Register dst, int loc) {
+        dst.set(mmu.readByte(loc));
+    }
+
+    private void load_dst_ind(RegisterPair dst, Register src) {
+        mmu.writeByte(src.read(), dst.read());
+    }
+
+    private void load_src_ind(Register dst, RegisterPair src) {
+        dst.set(mmu.readByte(src.read()));
     }
 
     private void inc(Register dst) {
-        dst.set(dst.read()+1);
+        dst.increment();
     }
 
     private void dec(Register dst) {
-        dst.set(dst.read()-1);
+        dst.decrement();
     }
 
     private void and(Register dst, Register src) {
@@ -134,7 +146,7 @@ public class CPU {
             int dst = (op_code & 0b00111000) >> 3;
 
             if (src == 0x06) {
-                load_ind(get_register(dst), HL);
+                load_src_ind(get_register(dst), HL);
             } else {
                 load(get_register(dst), get_register(src));
             }
@@ -238,8 +250,14 @@ public class CPU {
         CPU cpu = new CPU();
         cpu.load(cpu.A, 0x01);
         cpu.load(cpu.B, 0x0F);
+        cpu.DE.set(0xD111);
+        System.out.println(cpu.DE.read());
+        cpu.mmu.writeByte(0xD111, 0x11);
+        System.out.println(cpu.mmu.readByte(0xD111));
+        cpu.load_src_ind(cpu.A, cpu.DE);
+
 //        cpu.add(cpu.A, cpu.B, false);
-        cpu.execute_op_code(0x47);
-        System.out.println(cpu.B.read());
+//        cpu.execute_op_code(0x47);
+        System.out.println(cpu.A.read());
     }
 }
