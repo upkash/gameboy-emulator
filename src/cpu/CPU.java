@@ -103,12 +103,24 @@ public class CPU {
         dst.set(dst.read() & src.read());
     }
 
+    private void and_ind(Register dst, RegisterPair src) {
+        dst.set(dst.read() & mmu.readByte(src.read()));
+    }
+
     private void or(Register dst, Register src) {
         dst.set(dst.read() | src.read());
     }
 
+    private void or_ind(Register dst, RegisterPair src) {
+        dst.set(dst.read() | mmu.readByte(src.read()));
+    }
+
     private void xor(Register dst, Register src) {
         dst.set(dst.read() ^ src.read());
+    }
+
+    private void xor_ind(Register dst, RegisterPair src) {
+        dst.set(dst.read() ^ mmu.readByte(src.read()));
     }
 
     private Register get_register(int reg) {
@@ -122,13 +134,19 @@ public class CPU {
     }
 
     private void pop(RegisterPair reg_pair) {
-        reg_pair.set(mmu.readWord(reg_pair.read()));
+        reg_pair.set(mmu.readByte(sp.read()));
+        sp.decrement();
+        sp.decrement();
+    }
+
+    private void pop() {
+        pc.set(mmu.readByte(sp.read()));
         sp.decrement();
         sp.decrement();
     }
 
     private void push(RegisterPair reg_pair) {
-        mmu.writeWord(sp.read(), (byte) reg_pair.read());
+        mmu.writeWord(sp.read(), reg_pair.read());
         sp.increment();
         sp.increment();
     }
@@ -138,6 +156,7 @@ public class CPU {
         int d1 = op_code >> 4;
         int d0 = op_code & 0x0F;
         if (op_code == 0x00) {
+            return;
         }
         else if (op_code == 0x76) {
         } else if (op_code >= 0x40 && op_code < 0x80) {
@@ -161,15 +180,17 @@ public class CPU {
             sub(A, get_register(dst), (op_code > 0x97 && carry) ? 1 : 0);
         } else if (op_code >= 0xA0 && op_code < 0xA8) {
             // and
-            if (op_code == 0xA7) {
+            if (op_code == 0xA6) {
                 // mem
+                and_ind(A, HL);
             } else {
                 and(A, get_register(op_code & 0b00000111));
             }
         } else if (op_code >= 0xA9 && op_code < 0xB0) {
             // xor
-            if (op_code == 0xAF) {
+            if (op_code == 0xAe) {
                 // mem
+                xor_ind(A, HL);
             } else {
                 xor(A, get_register(op_code & 0b00000111));
             }
@@ -177,6 +198,7 @@ public class CPU {
             // or
             if (op_code == 0xB7) {
                 // mem
+                or_ind(A, HL);
             } else {
                 or(A, get_register(op_code & 0b00000111));
             }
@@ -185,14 +207,19 @@ public class CPU {
 
         } else if (op_code == 0xC0) {
             // RET NZ
+            if (!zero) pop();
         } else if (op_code == 0xC8) {
             // RET Z
+            if (zero) pop();
         } else if (op_code == 0xD0) {
             // RET NC
+            if (!carry) pop();
         } else if (op_code == 0xD8) {
             // RET C
+            if (carry) pop();
         } else if (op_code == 0xC9) {
             // RET
+           pop();
         } else if (op_code == 0xD9) {
             // RETI
         } else if (d1 >= 0xC && (d0 == 0x0F || d0 == 0x07)) {
