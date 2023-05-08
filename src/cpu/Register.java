@@ -17,11 +17,15 @@ public class Register {
         value = val;
     }
 
-    public void increment() {
-        this.value++;
+    public int increment() {
+        return ++this.value;
     }
 
-    public void decrement() {
-        this.value--;
+    public int decrement() {
+        return --this.value;
+    }
+
+    public void mask16() {
+        this.value &= 0xFFFF;
     }
 }

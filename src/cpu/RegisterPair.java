@@ -16,4 +16,12 @@ public class RegisterPair {
         reg1.set(val >> 8);
         reg2.set(val & 0x00FF);
     }
+
+    public void increment() {
+        set(read()+1);
+    }
+
+    public void decrement() {
+        set(read()-1);
+    }
 }

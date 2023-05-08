@@ -21,10 +21,7 @@ public class CPU {
     private final RegisterPair HL;
 
     // flags
-    private boolean carry;
-    private boolean half_carry;
-    private boolean operation;
-    private boolean zero;
+    private final Flag F;
 
     // memory
     private final MMU mmu;
@@ -37,6 +34,7 @@ public class CPU {
         E = new Register();
         H = new Register();
         L = new Register();
+        F = new Flag();
         sp = new Register();
         pc = new Register();
         BC = new RegisterPair(B, C);
@@ -46,28 +44,48 @@ public class CPU {
     }
     private void add(Register dst, Register src, int carry){
         int val = dst.read() + src.read() + carry;
-        zero = val == 0;
-        operation = false;
-        this.carry = val > 255;
+        F.set_zero((val == 0) ? 0 : 1);
+        F.set_operation(0);
+        F.set_carry((val > 255) ? 1 : 0);
         dst.set(val & 255);
     }
+
+    private void add(RegisterPair dst, RegisterPair src) {
+        int val = dst.read() + src.read();
+        F.set_operation(0);
+        F.set_carry(val > 0xFFFF ? 1 : 0);
+        dst.set(val);
+    }
+
+    private void add(RegisterPair dst, Register src) {
+        int val = dst.read() + src.read();
+        F.set_operation(0);
+        F.set_carry(val > 0xFFFF ? 1 : 0);
+        dst.set(val);
+    }
+
     private void add_ind(Register dst, RegisterPair src, int carry){
         int val = dst.read() + mmu.readByte(src.read()) + carry;
-        zero = val == 0;
-        operation = false;
-        this.carry = val > 255;
+        F.set_zero((val == 0) ? 0 : 1);
+        F.set_operation(0);
+        F.set_carry((val > 255) ? 1 : 0);
         dst.set(val & 255);
     }
 
     private void sub(Register dst, Register src, int carry){
         int val = dst.read() - src.read() - carry;
-        zero = val == 0;
-        operation = true;
-        this.carry = val < 0;
+        F.set_zero((val == 0) ? 0 : 1);
+        F.set_operation(1);
+        F.set_carry((val < 0) ? 1 : 0);
         dst.set(abs(val));
     }
 
-    private void sub_ind(Register dst, RegisterPair src, boolean carry){
+    private void sub_ind(Register dst, RegisterPair src, int carry){
+        int val = dst.read() - mmu.readByte(src.read()) - carry;
+        F.set_zero((val == 0) ? 0 : 1);
+        F.set_operation(1);
+        F.set_carry((val < 0) ? 1 : 0);
+        dst.set(abs(val));
     }
 
     private void load(Register dst, Register src) {
@@ -75,12 +93,24 @@ public class CPU {
     }
 
 
+    private void load(Register dst, int loc) {
+        dst.set(mmu.readByte(loc));
+    }
+
     private void load(RegisterPair dst, int loc) {
         dst.set(mmu.readWord(loc));
     }
 
-    private void load(Register dst, int loc) {
-        dst.set(mmu.readByte(loc));
+    private void load_imm8(Register dst, int val) {
+        dst.set(val);
+    }
+
+    private void load_imm16(RegisterPair dst, int val) {
+        dst.set(val);
+    }
+
+    private void load_imm16(int val, Register src) {
+        mmu.writeWord(val, src.read());
     }
 
     private void load_dst_ind(RegisterPair dst, Register src) {
@@ -92,35 +122,69 @@ public class CPU {
     }
 
     private void inc(Register dst) {
+        F.set_operation(0);
+        F.set_zero(dst.increment() == 0 ? 0 : 1);
+    }
+
+    private void inc(RegisterPair dst) {
+        dst.increment();
+    }
+
+    private void dec(RegisterPair dst) {
         dst.increment();
     }
 
     private void dec(Register dst) {
-        dst.decrement();
+        F.set_operation(1);
+        F.set_zero(dst.decrement() == 0 ? 0 : 1);
     }
 
     private void and(Register dst, Register src) {
-        dst.set(dst.read() & src.read());
+        int val = dst.read() & src.read();
+        F.set_operation(0);
+        F.set_zero(val == 0 ? 0 : 1);
+        F.set_carry(val > 0xFF ? 1 : 0);
+        dst.set(val & 0xFF);
     }
 
     private void and_ind(Register dst, RegisterPair src) {
+        int val = dst.read() & mmu.readByte(src.read());
+        F.set_operation(0);
+        F.set_zero(val == 0 ? 0 : 1);
+        F.set_carry(val > 0xFF ? 1 : 0);
         dst.set(dst.read() & mmu.readByte(src.read()));
     }
 
     private void or(Register dst, Register src) {
-        dst.set(dst.read() | src.read());
+        int val = dst.read() | src.read();
+        F.set_operation(0);
+        F.set_zero(val == 0 ? 0 : 1);
+        F.set_carry(val > 0xFF ? 1 : 0);
+        dst.set(val & 0xFF);
     }
 
     private void or_ind(Register dst, RegisterPair src) {
-        dst.set(dst.read() | mmu.readByte(src.read()));
+        int val = dst.read() | mmu.readByte(src.read());
+        F.set_operation(0);
+        F.set_zero(val == 0 ? 0 : 1);
+        F.set_carry(val > 0xFF ? 1 : 0);
+        dst.set(val & 0xFF);
     }
 
     private void xor(Register dst, Register src) {
-        dst.set(dst.read() ^ src.read());
+        int val = dst.read() ^ src.read();
+        F.set_operation(0);
+        F.set_zero(val == 0 ? 0 : 1);
+        F.set_carry(0);
+        dst.set(val & 0xFF);
     }
 
     private void xor_ind(Register dst, RegisterPair src) {
-        dst.set(dst.read() ^ mmu.readByte(src.read()));
+        int val = dst.read() ^ mmu.readByte(src.read());
+        F.set_operation(0);
+        F.set_zero(val == 0 ? 0 : 1);
+        F.set_carry(0);
+        dst.set(val & 0xFF);
     }
 
     private Register get_register(int reg) {
@@ -142,12 +206,23 @@ public class CPU {
     private void pop() {
         pc.set(mmu.readByte(sp.read()));
         sp.decrement();
+    }
+
+    private void pop(Register reg) {
+        reg.set(mmu.readByte(sp.read()));
         sp.decrement();
     }
+
+
 
     private void push(RegisterPair reg_pair) {
         mmu.writeWord(sp.read(), reg_pair.read());
         sp.increment();
+        sp.increment();
+    }
+
+    private void push(Register reg) {
+        mmu.writeWord(sp.read(), reg.read());
         sp.increment();
     }
 
@@ -159,6 +234,7 @@ public class CPU {
             return;
         }
         else if (op_code == 0x76) {
+            // halt
         } else if (op_code >= 0x40 && op_code < 0x80) {
             // ld
             int src = op_code & 0b00000111;
@@ -172,12 +248,20 @@ public class CPU {
 
         } else if (op_code >= 0x80 && op_code < 0x90) {
             // add & adc
-            int dst = op_code & 0b00000111;
-            add(A, get_register(dst), (op_code > 0x87 && carry) ? 1 : 0);
+            if (d0 == 0x06 || d0 == 0x0E) {
+                add_ind(A, HL, (d0 == 0x0E && F.get_carry() == 1) ? 1 : 0);
+            } else {
+                int dst = op_code & 0b00000111;
+                add(A, get_register(dst), (op_code > 0x87 && F.get_carry() == 1) ? 1 : 0);
+            }
         } else if (op_code >= 0x90 && op_code < 0xA0) {
             // sub & sbc
-            int dst = op_code & 0b00000111;
-            sub(A, get_register(dst), (op_code > 0x97 && carry) ? 1 : 0);
+            if (d0 == 0x06 || d0 == 0x0E) {
+                sub_ind(A, HL, (d0 == 0x0E && F.get_carry() == 1) ? 1 : 0);
+            } else {
+                int dst = op_code & 0b00000111;
+                sub(A, get_register(dst), (op_code > 0x97 && F.get_carry() == 1) ? 1 : 0);
+            }
         } else if (op_code >= 0xA0 && op_code < 0xA8) {
             // and
             if (op_code == 0xA6) {
@@ -207,37 +291,128 @@ public class CPU {
 
         } else if (op_code == 0xC0) {
             // RET NZ
-            if (!zero) pop();
+            if (F.get_zero() == 0) pop();
         } else if (op_code == 0xC8) {
             // RET Z
-            if (zero) pop();
+            if (F.get_zero() != 0) pop();
         } else if (op_code == 0xD0) {
             // RET NC
-            if (!carry) pop();
+            if (F.get_carry() == 0) pop();
         } else if (op_code == 0xD8) {
             // RET C
-            if (carry) pop();
+            if (F.get_carry() != 0) pop();
         } else if (op_code == 0xC9) {
             // RET
            pop();
         } else if (op_code == 0xD9) {
             // RETI
+            return;
         } else if (d1 >= 0xC && (d0 == 0x0F || d0 == 0x07)) {
             // RST
+            pc.increment();
+            push(pc);
+            if (op_code == 0xC7) {
+                pc.set(0x00);
+            } else if (op_code == 0xCF) {
+                pc.set(0x08);
+            } else if (op_code == 0xD7) {
+                pc.set(0x10);
+            } else if (op_code == 0xDF) {
+                pc.set(0x18);
+            } else if (op_code == 0xE7) {
+                pc.set(0x20);
+            } else if (op_code == 0xEF) {
+                pc.set(0x28);
+            } else if (op_code == 0xF7) {
+                pc.set(0x30);
+            } else if (op_code == 0xFF) {
+                pc.set(0x38);
+            }
         } else if (d1 < 0x04 && ((d0 >= 3 && d0 < 6) || (d0 >= 0xB && d0 < 0xE))) {
             // INC or DEC
+            if (d0 == 0x3) {
+                if (d1 == 0x0) inc(BC);
+                else if (d1 == 0x1) inc(DE);
+                else if (d1 == 0x2) inc(HL);
+                else if (d1 == 0x3) inc(sp);
+            } else if (d0 == 0xB) {
+                if (d1 == 0x0) dec(BC);
+                else if (d1 == 0x1) dec(DE);
+                else if (d1 == 0x2) dec(HL);
+                else if (d1 == 0x3) dec(sp);
+            } else if (d0 == 0xD) {
+                if (d1 == 0x0) dec(C);
+                else if (d1 == 0x1) dec(E);
+                else if (d1 == 0x2) dec(L);
+                else if (d1 == 0x3) dec(A);
+            } else if (d0 == 0x5) {
+                if (d1 == 0x0) dec(B);
+                else if (d1 == 0x1) dec(D);
+                else if (d1 == 0x2) dec(H);
+                else if (d1 == 0x3) dec(HL);
+
+            } else if (d0 == 0xC) {
+                if (d1 == 0x0) inc(C);
+                else if (d1 == 0x1) inc(E);
+                else if (d1 == 0x2) inc(L);
+                else if (d1 == 0x3) inc(A);
+            } else {
+                if (d1 == 0x0) inc(B);
+                else if (d1 == 0x1) inc(D);
+                else if (d1 == 0x2) inc(H);
+                else if (d1 == 0x3) inc(HL);
+            }
         } else if (d1 < 0x04 && (d0 == 0x06 || d0 == 0x0E)) {
             // LD REG, n
+            return;
         } else if (d1 < 0x04 && d0 == 0x01) {
             // LD REG PAIR, nn
+            int nn = mmu.readWord(pc.read()+1);
+            if (d1 == 0x00) load_imm16(BC, nn);
+            else if (d1 == 0x01) load_imm16(DE, nn);
+            else if (d1 == 0x02) load_imm16(HL, nn);
+            else sp.set(nn);
+            return;
         } else if (d1 < 0x04 && d0 == 0x09) {
-            // ADD REG PAIR, nn
+            // ADD REG PAIR, REG PAIR
+            if (d1 == 0x00) {
+                add(HL, BC);
+            } else if (d1 == 0x01) {
+                add(HL, DE);
+            } else if (d1 == 0x02) {
+                add(HL, HL);
+            } else {
+                add(HL, sp);
+            }
         } else if (op_code == 0x02 || op_code == 0x12) {
             // LD (BC) or (DE), A
+            if (op_code == 0x02) {
+                load_dst_ind(BC, A);
+            } else {
+                load_dst_ind(DE, A);
+            }
         } else if (op_code == 0x0A || op_code == 0x1A) {
             // LD A, (BC) or (DE)
+            if (op_code == 0x0A) {
+                load_src_ind(A, BC);
+            } else {
+                load_src_ind(A, DE);
+            }
         } else if (d1 >= 0x0C && d0 == 0x01) {
             // POP
+            if (d1 == 0x0C) {
+                pop(C);
+                pop(B);
+            } else if (d1 == 0x0D) {
+                pop(E);
+                pop(D);
+            } else if (d1 == 0x0E) {
+                pop(L);
+                pop(H);
+            } else {
+                // flag pop
+                pop(F);
+            }
         } else if ((d1 >= 0x0C && d1 < 0x0E) && (d0 == 0x02 || d0 == 0x0A)) {
             // JP flag nn
         } else if (op_code == 0xC3) {
@@ -248,8 +423,23 @@ public class CPU {
             // CALL nn
         } else if (d1 >= 0x0C && d0 == 0x05) {
             // PUSH
+            if (d1 == 0x0C) {
+                push(BC);
+            } else if (d1 == 0x0D) {
+                push(DE);
+            } else if (d1 == 0x0E) {
+                push(HL);
+            } else {
+                // flags
+                sp.increment();
+                mmu.writeByte(sp.read(), A.read());
+                sp.increment();
+                mmu.writeByte(sp.read(), F.read());
+            }
         } else if (op_code == 0x08) {
             // LD (nn) SP
+            int nn = mmu.readWord(pc.read()+1);
+            load_imm16(nn, sp);
         } else if (op_code == 0x18) {
             // JR n
         } else if ((d1 >= 0x02 && d1 < 0x04) && (d0 == 0x00 || d0 == 0x08)) {
@@ -272,6 +462,16 @@ public class CPU {
             // scf
         }
     }
+
+
+    private void run() {
+        while (true) {
+            int curr_instr = mmu.readByte(pc.read());
+            pc.increment();
+            execute_op_code(curr_instr);
+        }
+    }
+
 
     public static void main (String[] args) {
         CPU cpu = new CPU();
