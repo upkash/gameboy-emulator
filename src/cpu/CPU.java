@@ -20,13 +20,33 @@ public class CPU {
     private final RegisterPair DE;
     private final RegisterPair HL;
 
+    public static final int[] op_cycles = {
+            // 1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
+            1, 3, 2, 2, 1, 1, 2, 1, 5, 2, 2, 2, 1, 1, 2, 1, // 0
+            0, 3, 2, 2, 1, 1, 2, 1, 3, 2, 2, 2, 1, 1, 2, 1, // 1
+            2, 3, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 1, 1, 2, 1, // 2
+            2, 3, 2, 2, 3, 3, 3, 1, 2, 2, 2, 2, 1, 1, 2, 1, // 3
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, // 4
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, // 5
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, // 6
+            2, 2, 2, 2, 2, 2, 0, 2, 1, 1, 1, 1, 1, 1, 2, 1, // 7
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, // 8
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, // 9
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, // A
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, // B
+            2, 3, 3, 4, 3, 4, 2, 4, 2, 4, 3, 0, 3, 6, 2, 4, // C
+            2, 3, 3, 0, 3, 4, 2, 4, 2, 4, 3, 0, 3, 0, 2, 4, // D
+            3, 3, 2, 0, 0, 4, 2, 4, 4, 1, 4, 0, 0, 0, 2, 4, // E
+            3, 3, 2, 1, 0, 4, 2, 4, 3, 2, 4, 1, 0, 0, 2, 4, // F
+    };
+
     // flags
     private final Flag F;
 
     // memory
     private final MMU mmu;
 
-    public CPU () {
+    public CPU (String rom_path) {
         A = new Register();
         B  = new Register();
         C = new Register();
@@ -35,12 +55,13 @@ public class CPU {
         H = new Register();
         L = new Register();
         F = new Flag();
-        sp = new Register();
-        pc = new Register();
+        sp = new Register(0xFFFF);
+        pc = new Register(0x0100);
         BC = new RegisterPair(B, C);
         DE = new RegisterPair(D, E);
         HL = new RegisterPair(H, L);
-        mmu = new MMU();
+        mmu = new MMU(rom_path);
+//        mmu = new MMU();
     }
     private void add(Register dst, Register src, int carry){
         int val = dst.read() + src.read() + carry;
@@ -204,11 +225,13 @@ public class CPU {
     }
 
     private void pop() {
+        System.out.println("POPPING TO PC: " + Integer.toHexString(sp.read()));
         pc.set(mmu.readByte(sp.read()));
         sp.decrement();
     }
 
     private void pop(Register reg) {
+        System.out.println("POPPING TO REGISTER: " + Integer.toHexString(sp.read()));
         reg.set(mmu.readByte(sp.read()));
         sp.decrement();
     }
@@ -216,13 +239,21 @@ public class CPU {
 
 
     private void push(RegisterPair reg_pair) {
+        System.out.println("PUSHING REGISTER PAIR VAL: " + Integer.toHexString(sp.read()));
         mmu.writeWord(sp.read(), reg_pair.read());
         sp.increment();
         sp.increment();
     }
 
     private void push(Register reg) {
+        System.out.println("PUSHING REGISTER VAL: " + Integer.toHexString(sp.read()));
         mmu.writeWord(sp.read(), reg.read());
+        sp.increment();
+    }
+
+    private void push(int val) {
+        System.out.println("PUSHING VAL: " + Integer.toHexString(sp.read()));
+        mmu.writeWord(sp.read(), val);
         sp.increment();
     }
 
@@ -239,7 +270,7 @@ public class CPU {
             // ld
             int src = op_code & 0b00000111;
             int dst = (op_code & 0b00111000) >> 3;
-
+            System.out.println("ld " + Integer.toHexString(dst) + " " + Integer.toHexString(src));
             if (src == 0x06) {
                 load_src_ind(get_register(dst), HL);
             } else {
@@ -357,6 +388,7 @@ public class CPU {
                 else if (d1 == 0x2) inc(L);
                 else if (d1 == 0x3) inc(A);
             } else {
+                System.out.println("inc");
                 if (d1 == 0x0) inc(B);
                 else if (d1 == 0x1) inc(D);
                 else if (d1 == 0x2) inc(H);
@@ -364,9 +396,11 @@ public class CPU {
             }
         } else if (d1 < 0x04 && (d0 == 0x06 || d0 == 0x0E)) {
             // LD REG, n
+            System.out.println("ld reg n");
             return;
         } else if (d1 < 0x04 && d0 == 0x01) {
             // LD REG PAIR, nn
+            System.out.println("ld pair nn");
             int nn = mmu.readWord(pc.read()+1);
             if (d1 == 0x00) load_imm16(BC, nn);
             else if (d1 == 0x01) load_imm16(DE, nn);
@@ -386,6 +420,7 @@ public class CPU {
             }
         } else if (op_code == 0x02 || op_code == 0x12) {
             // LD (BC) or (DE), A
+            System.out.println("ld (pair) A");
             if (op_code == 0x02) {
                 load_dst_ind(BC, A);
             } else {
@@ -393,6 +428,7 @@ public class CPU {
             }
         } else if (op_code == 0x0A || op_code == 0x1A) {
             // LD A, (BC) or (DE)
+            System.out.println("ld A, (pair)");
             if (op_code == 0x0A) {
                 load_src_ind(A, BC);
             } else {
@@ -415,12 +451,28 @@ public class CPU {
             }
         } else if ((d1 >= 0x0C && d1 < 0x0E) && (d0 == 0x02 || d0 == 0x0A)) {
             // JP flag nn
+            int nn = mmu.readWord(pc.read()+1);
+            if (F.get_zero() == 1) pc.set(nn-1);
         } else if (op_code == 0xC3) {
             // JP nn
+            int nn = mmu.readWord(pc.read()+1);
+            System.out.println("JUMPING TO " + Integer.toHexString(nn));
+            pc.set(nn);
         } else if ((d1 >= 0x0C && d1 < 0x0E) && (d0 == 0x04 || d0 == 0x0C)) {
             // CALL flag, nn
+            if ((op_code == 0xC4 && F.get_zero() == 0) ||
+                (op_code == 0xCC && F.get_zero() == 1) ||
+                (op_code == 0xD4 && F.get_carry() == 0) ||
+                (op_code == 0xDC && F.get_carry() == 1)) {
+                int nn = mmu.readWord(pc.read()+1);
+                push(pc.read()+3);
+                pc.set(nn-1);
+            }
         } else if (op_code == 0xCD) {
             // CALL nn
+            int nn = mmu.readWord(pc.read()+1);
+            push(pc.read()+3);
+            pc.set(nn-1);
         } else if (d1 >= 0x0C && d0 == 0x05) {
             // PUSH
             if (d1 == 0x0C) {
@@ -442,8 +494,15 @@ public class CPU {
             load_imm16(nn, sp);
         } else if (op_code == 0x18) {
             // JR n
+            int n = mmu.readByte(pc.read()+1);
+            pc.set(n-1);
         } else if ((d1 >= 0x02 && d1 < 0x04) && (d0 == 0x00 || d0 == 0x08)) {
             // JR flag nn
+            int n = mmu.readByte(pc.read()+1);
+            if (op_code == 0x20 && F.get_zero() == 1) pc.set(n-1);
+            if (op_code == 0x28 && F.get_zero() == 0) pc.set(n-1);
+            if (op_code == 0x30 && F.get_carry() == 0) pc.set(n-1);
+            if (op_code == 0x38 && F.get_carry() == 1) pc.set(n-1);
         } else if (op_code == 0x0F) {
             // rrc a
         } else if (op_code == 0x1F) {
@@ -465,26 +524,33 @@ public class CPU {
 
 
     private void run() {
+        int i = 0x4000;
         while (true) {
-            int curr_instr = mmu.readByte(pc.read());
             pc.increment();
+            int curr_instr = mmu.readByte(pc.read());
+            String out = "PC " + Integer.toHexString(pc.read()) + " INST " + Integer.toHexString(curr_instr);
+            if (curr_instr != 0)
+                System.out.println(out);
             execute_op_code(curr_instr);
+            i++;
         }
     }
 
 
     public static void main (String[] args) {
-        CPU cpu = new CPU();
-        cpu.load(cpu.A, 0x01);
-        cpu.load(cpu.B, 0x0F);
-        cpu.DE.set(0xD111);
-        System.out.println(cpu.DE.read());
-        cpu.mmu.writeByte(0xD111, 0x11);
-        System.out.println(cpu.mmu.readByte(0xD111));
-        cpu.load_src_ind(cpu.A, cpu.DE);
-
-//        cpu.add(cpu.A, cpu.B, false);
-//        cpu.execute_op_code(0x47);
-        System.out.println(cpu.A.read());
+        CPU cpu = new CPU("/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/09-op r,r.gb");
+//        System.out.println(Integer.toHexString(cpu.sp.read()));
+//        cpu.run();
+//        System.out.println(cpu.C.read());
+//        cpu.load(cpu.A, 0x01);
+//        cpu.load(cpu.B, 0x0F);
+//        cpu.DE.set(0xD111);
+//        System.out.println(cpu.DE.read());
+//        cpu.mmu.writeByte(0xD111, 0x11);
+//        System.out.println(cpu.mmu.readByte(0xD111));
+//        cpu.load_src_ind(cpu.A, cpu.DE);
+//
+////        cpu.add(cpu.A, cpu.B, false);
+////        cpu.execute_op_code(0x47);
     }
 }
