@@ -18,11 +18,15 @@ public class Register {
     }
 
     public int increment() {
-        return ++this.value;
+        this.value++;
+        this.value &= 0xFF;
+        return this.value;
     }
 
     public int decrement() {
-        return --this.value;
+        this.value--;
+        this.value &= 0xFF;
+        return this.value;
     }
 
     public void mask16() {

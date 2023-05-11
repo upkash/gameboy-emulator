@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="First commit CPU and MMU partially implemented">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Gameboy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/oprr.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/out.txt" afterDir="false" />
+    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Most instructions implemented, figure out why blargg tests are inf looping">
+      <change afterPath="$PROJECT_DIR$/src/09-op r,r.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/EpicLog.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/cpu/SpecialRegister.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/CPU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpu/Flag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/Flags.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpu/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/Register.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpu/RegisterPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/RegisterPair.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory/MMU.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,6 +60,7 @@
   </component>
   <component name="RunManager" selected="Application.CPU">
     <configuration name="CPU" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <output_file path="output.txt" is_save="true" />
       <option name="MAIN_CLASS_NAME" value="cpu.CPU" />
       <module name="GameBoyEmulator" />
       <extension name="coverage">
@@ -127,12 +130,20 @@
       <option name="project" value="LOCAL" />
       <updated>1683515697974</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Most instructions implemented, figure out why blargg tests are inf looping">
+      <created>1683659063800</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1683659063801</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First commit CPU and MMU partially implemented" />
-    <option name="LAST_COMMIT_MESSAGE" value="First commit CPU and MMU partially implemented" />
+    <MESSAGE value="Most instructions implemented, figure out why blargg tests are inf looping" />
+    <option name="LAST_COMMIT_MESSAGE" value="Most instructions implemented, figure out why blargg tests are inf looping" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -142,7 +153,22 @@
           <line>13</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/cpu/CPU.java</url>
+          <line>446</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/cpu/CPU.java</url>
+          <line>261</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="mmu.wram[0x1ffd]" language="JAVA" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

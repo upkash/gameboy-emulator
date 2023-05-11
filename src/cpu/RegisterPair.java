@@ -9,7 +9,7 @@ public class RegisterPair {
     }
 
     public int read() {
-        return (reg1.read() << 8) + reg2.read();
+        return ((reg1.read() << 8) + reg2.read()) & 0xFFFF;
     }
 
     public void set(int val) {
@@ -17,11 +17,13 @@ public class RegisterPair {
         reg2.set(val & 0x00FF);
     }
 
-    public void increment() {
-        set(read()+1);
+    public int increment() {
+        set((read()+1) & 0xFFFF);
+        return read();
     }
 
-    public void decrement() {
-        set(read()-1);
+    public int decrement() {
+        set((read()-1) & 0xFFFF);
+        return read();
     }
 }
