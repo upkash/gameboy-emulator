@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Most instructions are implemented, moving on the graphics">
-      <change beforePath="$PROJECT_DIR$/src/EpicLog.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory/MMU.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
