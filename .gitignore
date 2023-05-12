@@ -30,4 +30,4 @@ bin/
 
 gameboy-doctor/*
 *.txt
-*.gb
+src/*.gb
