@@ -31,7 +31,7 @@ public class MMU  {
 
             // skip to the end of the bootloader
             0xC3, 0xFD, 0x00, // JP 0x00FD
-    };
+    };;
     private boolean inbios;
     private int[] bios;
     private int[] rom;
@@ -45,6 +45,17 @@ public class MMU  {
     private int[] ppu;
     private int[] zram;
     private int[] intenable;
+
+    public MMU() {
+        wram = new int[0x2000];
+        wrams = new int[0x2000];
+        rom =  new int[0x8000];
+        eram = new int[0xFFF];
+        vram = new int[0xFFF];
+        System.arraycopy(boot_loader, 0, boot, 0, boot_loader.length);
+        int[] test_rom = {0xC3, 0x01, 0x04, 0x0C, 0x40};
+        System.arraycopy(test_rom, 0, rom, 0x0100, test_rom.length);
+    }
 
     public MMU(String rom_path) {
         wram = new int[0x2000];
@@ -79,11 +90,14 @@ public class MMU  {
         int[] rom = new int[cartridgeMemory.length];
         for (int i = 0; i < cartridgeMemory.length; i++) {
             rom[i] = cartridgeMemory[i] & 0xFF;
+//            if (rom[i] != 0)
+//                System.out.println("addr: " + Integer.toHexString(i) + " val: " + Integer.toHexString(rom[i]));
         }
         return rom;
     }
 
     public void writeByte(int address, int value) {
+//        System.out.println("WRITING");
         if (address == 0xff44) {
             System.out.println("AT " + Integer.toHexString(address));
             System.out.println();
@@ -103,10 +117,12 @@ public class MMU  {
             case 0xB000:
             case 0xC000:    // internal RAM
             case 0xD000:
+//                System.out.println("WRITING TO addr " + Integer.toHexString(address) + " in wram idx " + Integer.toHexString(address & 0x1fff) + " max " + Integer.toHexString(wram.length-1));
                 wram[address & 0x1FFF] = value;
                 break;
             case 0xE000:
             case 0xF000:
+//                System.out.println("WRITING TO STACK");
                 zram[address & 0x00FF] = value;
         }
 
@@ -124,6 +140,9 @@ public class MMU  {
     }
 
     public int readByte(int address) {
+//        System.out.println("READING " + Integer.toHexString(address));
+//        if (address == 0x4244)
+//            System.out.println("READING addr " + Integer.toHexString(address));
         switch (address & 0xf000) {
             case 0x0000:
             case 0x0100:
@@ -133,13 +152,18 @@ public class MMU  {
             case 0x5000:
             case 0x6000:
             case 0x7000:
+//                String out = "READING " + Integer.toHexString(address);
+//                System.out.println(out);
                 return rom[address];
             case 0x8000:
+                return 0;
             case 0x9000:
+                return 0;
             case 0xA000:
+                return 0;
             case 0xB000:
-            case 0xC000:
-                return 0; // internal RAM
+                return 0;
+            case 0xC000:    // internal RAM
             case 0xD000:
                 return wram[address & 0x1FFF];
             case 0xE000:
@@ -151,4 +175,9 @@ public class MMU  {
         return 0;
     }
 
+    public static void main (String[] args) throws IOException {
+        MMU mmu = new MMU();
+        System.out.println(Integer.toHexString(mmu.readByte(0x100)));
+        System.out.println(Integer.toHexString(mmu.readWord(0x101)));
+    }
 }
