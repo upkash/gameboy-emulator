@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Most instructions are implemented, moving on the graphics">
-      <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory/MMU.java" afterDir="false" />
+    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Slight clean up">
+      <change beforePath="$PROJECT_DIR$/src/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/CPU.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +161,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683926398919</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Slight clean up">
+      <created>1683927067133</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1683927067133</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -171,7 +178,8 @@
     <MESSAGE value="First commit CPU and MMU partially implemented" />
     <MESSAGE value="Most instructions implemented, figure out why blargg tests are inf looping" />
     <MESSAGE value="Most instructions are implemented, moving on the graphics" />
-    <option name="LAST_COMMIT_MESSAGE" value="Most instructions are implemented, moving on the graphics" />
+    <MESSAGE value="Slight clean up" />
+    <option name="LAST_COMMIT_MESSAGE" value="Slight clean up" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

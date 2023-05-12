@@ -46,6 +46,7 @@ public class CPU {
     private final MMU mmu;
 
     private boolean stop;
+    private boolean halt;
 
     public CPU (String rom_path) {
         A = new Register(0x01);
@@ -62,6 +63,7 @@ public class CPU {
         DE = new RegisterPair(D, E);
         HL = new RegisterPair(H, L);
         stop = false;
+        halt = false;
         mmu = new MMU(rom_path);
 //        mmu = new MMU();
     }
@@ -373,6 +375,7 @@ public class CPU {
             pc.increment();
         } else if (op_code == 0x76) {
             // halt
+            halt = true;
         } else if (op_code == 0xF0) {
             int addr = mmu.readByte(pc.read()+1) + 0xff00;
             int val = mmu.readByte(addr);
@@ -632,6 +635,8 @@ public class CPU {
             // LD (nn) SP
             int nn = mmu.readWord(pc.read()+1);
             load_imm16(nn, sp);
+            pc.increment();
+            pc.increment();
         } else if (op_code == 0x18) {
             // JR n
             int n = mmu.readByte(pc.read()+1);
