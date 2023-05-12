@@ -17,13 +17,11 @@ public class RegisterPair {
         reg2.set(val & 0x00FF);
     }
 
-    public int increment() {
+    public void increment() {
         set((read()+1) & 0xFFFF);
-        return read();
     }
 
-    public int decrement() {
+    public void decrement() {
         set((read()-1) & 0xFFFF);
-        return read();
     }
 }
