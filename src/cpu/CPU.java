@@ -366,7 +366,7 @@ public class CPU {
         } else if (op_code == 0xE9) {
             pc.set(mmu.readByte(HL.read())-1);
         } else if (op_code == 0xE0) {
-            load_dst_ind(mmu.readByte(pc.read()+1), A);
+            load_dst_ind(mmu.readByte(pc.read()+1) + 0xFF00, A);
             pc.increment();
         } else if (op_code == 0xEA) {
             // load (nn), A
