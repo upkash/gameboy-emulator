@@ -1,8 +1,18 @@
 package memory;
 
+import gpu.Tile;
+import gpu.TileMapContainer;
+import gpu.TileSet;
+import gpu.TileMap;
 import java.io.*;
 
 
+/**
+ *  Memory Management Unit for the Gameboy Classic;
+ *  Maps addresses to byte arrays;
+ *  Read and write values to memory;
+ *  Stores tile information for graphics;
+ */
 public class MMU  {
     private static final int ROM_BANK_SIZE = 0x4000;
     private static final int RAM_BANK_SIZE = 0x2000;
@@ -41,10 +51,15 @@ public class MMU  {
     private final int[] io;
     private final int[] hram;
 
+    private final TileSet tileSet;
+
+    private final TileMapContainer tileMaps;
+
+
     public MMU(String rom_path) {
         wram = new int[0x2000];
         eram = new int[0x2000];
-        vram = new int[0xFFF];
+        vram = new int[0x2000];
         oam = new int[0xA0];
         io = new int[0x80];
         hram = new int[0x80];
@@ -54,6 +69,8 @@ public class MMU  {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        tileSet = new TileSet();
+        tileMaps = new TileMapContainer(tileSet);
     }
 
     private int[] load_rom(String fileName) throws IOException {
@@ -87,8 +104,14 @@ public class MMU  {
             case 0xE000:
                 throw new IndexOutOfBoundsException();
             case 0x8000:
+//                tileSet.setTileVal(address, value);
             case 0x9000:
+//                System.out.print.ln(Integer.toHexString(address & 0x1FFF));
                 vram[address & 0x1FFF] = value;
+//                if (address >= 0x9800 && address <= 0x9FFF) {
+//                    tileMaps.updateTileMap(address, value);
+//                }
+//                System.out.println("writing to " + Integer.toHexString(address));
                 break;
             case 0xA000:
             case 0xB000:
@@ -149,5 +172,13 @@ public class MMU  {
 
         }
         return 0;
+    }
+
+    public Tile getTile(int address) {
+        return tileSet.getTile(address);
+    }
+
+    public Tile getTileFromIndex(int idx) {
+        return tileSet.getTileFromIndex(idx);
     }
 }
