@@ -410,23 +410,6 @@ public class CPU implements Runnable {
         F.set_half_carry(0);
         F.set_carry(0);
     }
-//    private void sll(Register dst) {
-//        int value = dst.read() << 1;
-//        F.set_carry(value >> 7);
-//        value |= 0x01;
-//        value &= 0xff;
-//        F.set_zero(((value & 0xFF) == 0 ? 1 : 0));
-//        dst.set(value);
-//    }
-//
-//    private void sll(RegisterPair dst) {
-//        int value = mmu.readByte(dst.read()) << 1;
-//        F.set_carry(value >> 7);
-//        value |= 0x01;
-//        value &= 0xff;
-//        F.set_zero(((value & 0xFF) == 0 ? 1 : 0));
-//        dst.set(value);
-//    }
 
     private void rrc(Register dst) {
         F.set_carry(dst.read() & 0x01);
