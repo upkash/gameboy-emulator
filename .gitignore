@@ -31,3 +31,5 @@ bin/
 gameboy-doctor/*
 *.txt
 src/*.gb
+
+cpu_instrs/*

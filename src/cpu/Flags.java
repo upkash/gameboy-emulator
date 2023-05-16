@@ -18,7 +18,7 @@ public class Flags extends Register {
     }
 
     public int get_carry() {
-        return super.value >> 5;
+        return (super.value >> 4) & 0xF1;
     }
 
     public void set_zero(int val) {

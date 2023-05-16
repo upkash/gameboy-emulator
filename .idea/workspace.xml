@@ -4,18 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Slight clean up">
-      <change afterPath="$PROJECT_DIR$/src/gpu/Pallette.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gpu/Screen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gpu/Tile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gpu/TileMap.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gpu/TileMapContainer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gpu/TileSet.java" afterDir="false" />
+    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Fixed some instructions, about to add CB instructions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Gameboy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Gameboy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/09-op r,r.gb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/CPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gpu/GPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gpu/GPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory/MMU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpu/Flags.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/Flags.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -217,7 +210,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683941696433</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Fixed some instructions, about to add CB instructions">
+      <created>1684137962456</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1684137962456</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -228,7 +228,8 @@
     <MESSAGE value="Most instructions implemented, figure out why blargg tests are inf looping" />
     <MESSAGE value="Most instructions are implemented, moving on the graphics" />
     <MESSAGE value="Slight clean up" />
-    <option name="LAST_COMMIT_MESSAGE" value="Slight clean up" />
+    <MESSAGE value="Fixed some instructions, about to add CB instructions" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed some instructions, about to add CB instructions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
