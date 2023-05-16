@@ -143,6 +143,7 @@ public class MMU  {
     }
 
     public int readByte(int address) {
+//        System.out.println(Integer.toHexString(address));
         switch (address & 0xf000) {
             case 0x0000:
             case 0x0100:
