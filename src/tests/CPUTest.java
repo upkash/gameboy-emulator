@@ -12,7 +12,9 @@ public class CPUTest {
         CPU cpu = new CPU(mmu);
         Thread t = new Thread(cpu);
         t.start();
-        while (!cpu.testOutput.contains("Passed") && !cpu.testOutput.contains("Failed"));
+        while (!cpu.testOutput.contains("Passed") && !cpu.testOutput.contains("Failed")) {
+            System.out.println(cpu.testOutput);
+        }
         cpu.stop = true;
         try {
             t.join();

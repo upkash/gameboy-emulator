@@ -28,8 +28,4 @@ public class Register {
         this.value &= 0xFF;
         return this.value;
     }
-
-    public void mask16() {
-        this.value &= 0xFFFF;
-    }
 }

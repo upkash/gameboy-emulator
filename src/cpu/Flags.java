@@ -5,23 +5,23 @@ public class Flags extends Register {
         super.value = value;
     }
 
-    public int get_zero() {
+    public int getZero() {
         return super.value >> 7;
     }
 
-    public int get_operation() {
+    public int getOperation() {
         return super.value >> 6;
     }
 
-    public int get_half_carry() {
+    public int getHalfCarry() {
         return super.value >> 4;
     }
 
-    public int get_carry() {
+    public int getCarry() {
         return (super.value >> 4) & 0xF1;
     }
 
-    public void set_zero(int val) {
+    public void setZero(int val) {
         if (val == 1) {
             super.value |= 0x80;
         } else {
@@ -29,7 +29,7 @@ public class Flags extends Register {
         }
     }
 
-    public void set_operation(int val) {
+    public void setOperation(int val) {
         if (val == 1) {
             super.value |= 0x40;
         } else {
@@ -37,7 +37,7 @@ public class Flags extends Register {
         }
     }
 
-    public void set_half_carry(int val) {
+    public void setHalfCarry(int val) {
         if (val == 1) {
             super.value |= 0x20;
         } else {
@@ -45,7 +45,7 @@ public class Flags extends Register {
         }
     }
 
-    public void set_carry(int val) {
+    public void setCarry(int val) {
         if (val == 1) {
             super.value |= 0x10;
         } else {

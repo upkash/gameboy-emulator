@@ -69,72 +69,72 @@ public class CPU implements Runnable {
     }
     private void add(Register dst, Register src, int carry){
         int val = dst.read() + src.read() + carry;
-        F.set_zero(((val & 0xFF) == 0) ? 1 : 0);
-        F.set_operation(0);
-        F.set_carry((val > 255) ? 1 : 0);
-        if (half_carry_add8(dst.read(), src.read()) == 1 ||
-                half_carry_add8(dst.read(), carry) == 1 ||
-                half_carry_add8(carry, src.read()) == 1 ||
-                half_carry_add8(dst.read() + carry, src.read()) == 1) {
-            F.set_half_carry(1);
-        } else F.set_half_carry(0);
+        F.setZero(((val & 0xFF) == 0) ? 1 : 0);
+        F.setOperation(0);
+        F.setCarry((val > 255) ? 1 : 0);
+        if (halfCarryAdd8(dst.read(), src.read()) == 1 ||
+                halfCarryAdd8(dst.read(), carry) == 1 ||
+                halfCarryAdd8(carry, src.read()) == 1 ||
+                halfCarryAdd8(dst.read() + carry, src.read()) == 1) {
+            F.setHalfCarry(1);
+        } else F.setHalfCarry(0);
         dst.set(val & 0xFF);
     }
 
     private void add(Register dst, int value, int carry){
         int val = dst.read() + value + carry;
-        F.set_zero(((val & 0xFF) == 0) ? 1 : 0);
-        F.set_operation(0);
-        F.set_carry((val > 255) ? 1 : 0);
-        if (half_carry_add8(dst.read(), value) == 1 ||
-                half_carry_add8(dst.read(), carry) == 1 ||
-                half_carry_add8(carry, value) == 1 ||
-                half_carry_add8(dst.read() + carry, value) == 1) {
-            F.set_half_carry(1);
-        } else F.set_half_carry(0);
+        F.setZero(((val & 0xFF) == 0) ? 1 : 0);
+        F.setOperation(0);
+        F.setCarry((val > 255) ? 1 : 0);
+        if (halfCarryAdd8(dst.read(), value) == 1 ||
+                halfCarryAdd8(dst.read(), carry) == 1 ||
+                halfCarryAdd8(carry, value) == 1 ||
+                halfCarryAdd8(dst.read() + carry, value) == 1) {
+            F.setHalfCarry(1);
+        } else F.setHalfCarry(0);
         dst.set(val & 0xFF);
     }
 
     private void add(RegisterPair dst, RegisterPair src) {
         int val = dst.read() + src.read();
-        F.set_operation(0);
-        F.set_carry(val > 0xFFFF ? 1 : 0);
-        F.set_half_carry(half_carry_add16(dst.read(),src.read()));
+        F.setOperation(0);
+        F.setCarry(val > 0xFFFF ? 1 : 0);
+        F.setHalfCarry(halfCarryAdd16(dst.read(),src.read()));
         dst.set(val);
     }
 
     private void add(RegisterPair dst, Register src) {
         int val = dst.read() + src.read();
-        F.set_operation(0);
-        F.set_carry(val > 0xFFFF ? 1 : 0);
+        F.setOperation(0);
+        F.setCarry(val > 0xFFFF ? 1 : 0);
         dst.set(val);
     }
 
-    private void add_ind(Register dst, RegisterPair src, int carry){
+    private void addInd(Register dst, RegisterPair src, int carry){
         int read = mmu.readByte(src.read());
         int val = dst.read() + read + carry;
-        F.set_zero((val == 0) ? 0 : 1);
-        F.set_operation(0);
-        F.set_carry((val > 255) ? 1 : 0);
-        F.set_half_carry(half_carry_add8(dst.read(), read));
+        F.setZero((val == 0) ? 0 : 1);
+        F.setOperation(0);
+        F.setCarry((val > 255) ? 1 : 0);
+        F.setHalfCarry(halfCarryAdd8(dst.read(), read));
         dst.set(val & 255);
     }
 
     private void sub(Register dst, Register src, int carry){
         int val = dst.read() - src.read() - carry;
-        F.set_zero(((val & 0xff) == 0) ? 1 : 0);
-        F.set_operation(1);
-        F.set_carry((val < 0) ? 1 : 0);
+        F.setZero(((val & 0xff) == 0) ? 1 : 0);
+        F.setOperation(1);
+        F.setCarry((val < 0) ? 1 : 0);
 
-        if (carry == 0) F.set_half_carry(half_carry_sub8(dst.read(), src.read()));
+        if (carry == 0) F.setHalfCarry(halfCarrySub8(dst.read(), src.read()));
 
-        else if (src.read() == 0) F.set_half_carry(half_carry_sub8(dst.read(), carry));
-        else if (dst.read() == 0) F.set_half_carry(1);
+        else if (src.read() == 0) F.setHalfCarry(halfCarrySub8(dst.read(), carry));
+        else if (dst.read() == 0) F.setHalfCarry(1);
         else {
-            if (half_carry_sub8(dst.read()- src.read(), carry) == 1 || half_carry_sub8(dst.read() , src.read()) == 1) {
-                F.set_half_carry(1);
+            if (halfCarrySub8(dst.read()- src.read(), carry) == 1 || halfCarrySub8(dst.read() , src.read()) == 1) {
+                F.setHalfCarry(1);
             } else {
-                F.set_half_carry(0);
+                F.setHalfCarry(0);
             }
         }
         dst.set(0xFF & val);
@@ -142,29 +142,29 @@ public class CPU implements Runnable {
 
     private void sub(Register dst, int value, int carry){
         int val = dst.read() - value - carry;
-        F.set_zero(((val & 0xFF)== 0) ? 1 : 0);
-        F.set_operation(1);
-        F.set_carry((val < 0) ? 1 : 0);
-        if (carry == 0) F.set_half_carry(half_carry_sub8(dst.read(), value));
-        else if (value == 0) F.set_half_carry(half_carry_sub8(dst.read(), carry));
-        else if (dst.read() == 0) F.set_half_carry(1);
+        F.setZero(((val & 0xFF)== 0) ? 1 : 0);
+        F.setOperation(1);
+        F.setCarry((val < 0) ? 1 : 0);
+        if (carry == 0) F.setHalfCarry(halfCarrySub8(dst.read(), value));
+        else if (value == 0) F.setHalfCarry(halfCarrySub8(dst.read(), carry));
+        else if (dst.read() == 0) F.setHalfCarry(1);
         else {
-            if (half_carry_sub8(dst.read()- value, carry) == 1 || half_carry_sub8(dst.read() , value) == 1) {
-                F.set_half_carry(1);
+            if (halfCarrySub8(dst.read()- value, carry) == 1 || halfCarrySub8(dst.read() , value) == 1) {
+                F.setHalfCarry(1);
             } else {
-                F.set_half_carry(0);
+                F.setHalfCarry(0);
             }
         }
         dst.set(val & 255);
     }
 
-    private void sub_ind(Register dst, RegisterPair src, int carry){
+    private void subInd(Register dst, RegisterPair src, int carry){
         int read = mmu.readByte(src.read());
         int val = dst.read() - read - carry;
-        F.set_zero((val == 0) ? 0 : 1);
-        F.set_operation(1);
-        F.set_carry((val < 0) ? 1 : 0);
-        F.set_half_carry(half_carry_sub8(dst.read(), read));
+        F.setZero((val == 0) ? 0 : 1);
+        F.setOperation(1);
+        F.setCarry((val < 0) ? 1 : 0);
+        F.setHalfCarry(halfCarrySub8(dst.read(), read));
         dst.set(abs(val));
     }
 
@@ -172,56 +172,56 @@ public class CPU implements Runnable {
         dst.set(src.read());
     }
 
-    private void load_imm8(Register dst, int val) {
+    private void loadImm8(Register dst, int val) {
         dst.set(val);
     }
 
-    private void load_imm16(RegisterPair dst, int val) {
+    private void loadImm16(RegisterPair dst, int val) {
         dst.set(val);
     }
 
-    private void load_imm16(int val, Register src) {
+    private void loadImm16(int val, Register src) {
         mmu.writeWord(val, src.read());
     }
 
-    private void load_dst_ind(RegisterPair dst, Register src) {
+    private void loadDstInd(RegisterPair dst, Register src) {
         mmu.writeByte(dst.read(), src.read());
     }
 
-    private void load_dst_ind(int location, Register src) {
+    private void loadDstInd(int location, Register src) {
         mmu.writeByte(location, src.read());
     }
 
-    private void load_src_ind(Register dst, RegisterPair src) {
+    private void loadSrcInd(Register dst, RegisterPair src) {
         dst.set(mmu.readByte(src.read()));
     }
 
     private void inc(Register dst) {
-        F.set_operation(0);
-        F.set_half_carry(half_carry_add8(dst.read(), 1));
-        F.set_zero(dst.increment() == 0 ? 1 : 0);
+        F.setOperation(0);
+        F.setHalfCarry(halfCarryAdd8(dst.read(), 1));
+        F.setZero(dst.increment() == 0 ? 1 : 0);
     }
 
     private void inc(RegisterPair dst) {
         dst.increment();
     }
 
-    private void inc_ind(RegisterPair dst) {
-        F.set_operation(0);
+    private void incInd(RegisterPair dst) {
+        F.setOperation(0);
         int val = mmu.readByte(dst.read());
-        F.set_half_carry(half_carry_add8(val, 1));
+        F.setHalfCarry(halfCarryAdd8(val, 1));
         val++;
         mmu.writeByte(dst.read(), val);
-        F.set_zero(val == 0 ? 1 : 0);
+        F.setZero(val == 0 ? 1 : 0);
     }
 
-    private void dec_ind(RegisterPair dst) {
-        F.set_operation(1);
+    private void decInd(RegisterPair dst) {
+        F.setOperation(1);
         int val = mmu.readByte(dst.read());
-        F.set_half_carry(half_carry_sub8(val, 1));
+        F.setHalfCarry(halfCarrySub8(val, 1));
         val--;
         mmu.writeByte(dst.read(), val);
-        F.set_zero(val == 0 ? 1 : 0);
+        F.setZero(val == 0 ? 1 : 0);
     }
 
     private void dec(RegisterPair dst) {
@@ -229,168 +229,168 @@ public class CPU implements Runnable {
     }
 
     private void dec(Register dst) {
-        F.set_operation(1);
-        F.set_half_carry(half_carry_sub8(dst.read(), 1));
-        F.set_zero(dst.decrement() == 0 ? 1 : 0);
+        F.setOperation(1);
+        F.setHalfCarry(halfCarrySub8(dst.read(), 1));
+        F.setZero(dst.decrement() == 0 ? 1 : 0);
     }
 
     private void and(Register dst, Register src) {
         int val = dst.read() & src.read();
-        F.set_operation(0);
-        F.set_zero(val == 0 ? 1 : 0);
-        F.set_carry(0);
-        F.set_half_carry(1);
+        F.setOperation(0);
+        F.setZero(val == 0 ? 1 : 0);
+        F.setCarry(0);
+        F.setHalfCarry(1);
         dst.set(val & 0xFF);
     }
 
     private void and(Register dst, int value) {
         int val = dst.read() & value;
-        F.set_operation(0);
-        F.set_zero(val == 0 ? 1 : 0);
-        F.set_carry(0);
-        F.set_half_carry(1);
+        F.setOperation(0);
+        F.setZero(val == 0 ? 1 : 0);
+        F.setCarry(0);
+        F.setHalfCarry(1);
         dst.set(val & 0xFF);
     }
 
-    private void and_ind(Register dst, RegisterPair src) {
+    private void andInd(Register dst, RegisterPair src) {
         int val = dst.read() & mmu.readByte(src.read());
-        F.set_operation(0);
-        F.set_zero(val == 0 ? 1 : 0);
-        F.set_carry(val > 0xFF ? 1 : 0);
-        F.set_half_carry(1);
+        F.setOperation(0);
+        F.setZero(val == 0 ? 1 : 0);
+        F.setCarry(val > 0xFF ? 1 : 0);
+        F.setHalfCarry(1);
         dst.set(dst.read() & mmu.readByte(src.read()));
     }
 
     private void or(Register dst, Register src) {
         int val = dst.read() | src.read();
-        F.set_operation(0);
-        F.set_zero(val == 0 ? 1 : 0);
-        F.set_carry(0);
-        F.set_half_carry(0);
+        F.setOperation(0);
+        F.setZero(val == 0 ? 1 : 0);
+        F.setCarry(0);
+        F.setHalfCarry(0);
         dst.set(val & 0xFF);
     }
 
     private void or(Register dst, int value) {
         int val = dst.read() | value;
-        F.set_operation(0);
-        F.set_zero(val == 0 ? 1 : 0);
-        F.set_carry(0);
-        F.set_half_carry(0);
+        F.setOperation(0);
+        F.setZero(val == 0 ? 1 : 0);
+        F.setCarry(0);
+        F.setHalfCarry(0);
         dst.set(val & 0xFF);
     }
 
-    private void or_ind(Register dst, RegisterPair src) {
+    private void orInd(Register dst, RegisterPair src) {
         int val = dst.read() | mmu.readByte(src.read());
-        F.set_operation(0);
-        F.set_zero(val == 0 ? 1 : 0);
-        F.set_carry(0);
-        F.set_half_carry(0);
+        F.setOperation(0);
+        F.setZero(val == 0 ? 1 : 0);
+        F.setCarry(0);
+        F.setHalfCarry(0);
         dst.set(val & 0xFF);
     }
 
     private void xor(Register dst, Register src) {
         int val = dst.read() ^ src.read();
-        F.set_operation(0);
-        F.set_zero((val & 0xFF) == 0 ? 1 : 0);
-        F.set_carry(0);
-        F.set_half_carry(0);
+        F.setOperation(0);
+        F.setZero((val & 0xFF) == 0 ? 1 : 0);
+        F.setCarry(0);
+        F.setHalfCarry(0);
         dst.set(val & 0xFF);
     }
 
     private void xor(Register dst, int value) {
         int val = dst.read() ^ value;
-        F.set_operation(0);
-        F.set_zero(val == 0 ? 1 : 0);
-        F.set_carry(0);
-        F.set_half_carry(0);
+        F.setOperation(0);
+        F.setZero(val == 0 ? 1 : 0);
+        F.setCarry(0);
+        F.setHalfCarry(0);
         dst.set(val & 0xFF);
     }
 
-    private void xor_ind(Register dst, RegisterPair src) {
+    private void xorInd(Register dst, RegisterPair src) {
         int val = dst.read() ^ mmu.readByte(src.read());
-        F.set_operation(0);
-        F.set_zero(val == 0 ? 1 : 0);
-        F.set_carry(0);
-        F.set_half_carry(0);
+        F.setOperation(0);
+        F.setZero(val == 0 ? 1 : 0);
+        F.setCarry(0);
+        F.setHalfCarry(0);
         dst.set(val & 0xFF);
     }
 
     private void cp(Register dst, Register src) {
         int val = dst.read() - src.read();
-        F.set_zero((val == 0) ? 1 : 0);
-        F.set_operation(1);
-        F.set_carry((val < 0) ? 1 : 0);
-        F.set_half_carry(half_carry_sub8(dst.read(), src.read()));
+        F.setZero((val == 0) ? 1 : 0);
+        F.setOperation(1);
+        F.setCarry((val < 0) ? 1 : 0);
+        F.setHalfCarry(halfCarrySub8(dst.read(), src.read()));
     }
 
     private void cp(Register dst, int value) {
         int val = dst.read() - value;
-        F.set_zero((val == 0) ? 1 : 0);
-        F.set_operation(1);
-        F.set_carry((val < 0) ? 1 : 0);
-        F.set_half_carry(half_carry_sub8(dst.read(), value));
+        F.setZero((val == 0) ? 1 : 0);
+        F.setOperation(1);
+        F.setCarry((val < 0) ? 1 : 0);
+        F.setHalfCarry(halfCarrySub8(dst.read(), value));
     }
 
-    private void cp_ind(Register dst, RegisterPair src) {
+    private void cpInd(Register dst, RegisterPair src) {
         int val = dst.read() - mmu.readByte(src.read());
-        F.set_zero((val == 0) ? 0 : 1);
-        F.set_operation(1);
-        F.set_carry((val < 0) ? 1 : 0);
-        F.set_half_carry(half_carry_sub8(dst.read(), src.read()));
+        F.setZero((val == 0) ? 1 : 0);
+        F.setOperation(1);
+        F.setCarry((val < 0) ? 1 : 0);
+        F.setHalfCarry(halfCarrySub8(dst.read(), src.read()));
     }
 
     private void rlc(Register dst) {
-        F.set_carry(dst.read() >> 7);
+        F.setCarry(dst.read() >> 7);
         int value = Integer.rotateLeft(dst.read(), 1);
-        value |= F.get_carry();
+        value |= F.getCarry();
         value &= 0xff;
-        F.set_zero(value == 0 ? 1 : 0);
+        F.setZero(value == 0 ? 1 : 0);
         dst.set(value);
 
     }
 
     private void rlc(RegisterPair dst) {
         int value = Integer.rotateLeft(mmu.readByte(dst.read()), 1);
-        F.set_carry(value >> 7);
+        F.setCarry(value >> 7);
         value |= value >> 7;
-        F.set_zero(value == 0 ? 1 : 0);
+        F.setZero(value == 0 ? 1 : 0);
         dst.set(value);
     }
 
     private void rl(Register dst) {
-        int prev = F.get_carry();
-        F.set_carry(dst.read() >> 7);
+        int prev = F.getCarry();
+        F.setCarry(dst.read() >> 7);
         int value = Integer.rotateLeft(dst.read(), 1);
         value |= prev;
         value &= 0xff;
-        F.set_zero(value == 0 ? 1 : 0);
+        F.setZero(value == 0 ? 1 : 0);
         dst.set(value & 0xFF);
     }
 
     private void rl(RegisterPair dst) {
         int value = Integer.rotateLeft(mmu.readByte(dst.read()), 1);
-        value |= F.get_carry();
-        F.set_carry(value >> 7);
+        value |= F.getCarry();
+        F.setCarry(value >> 7);
         value &= 0xffff;
-        F.set_zero(value == 0 ? 1 : 0);
+        F.setZero(value == 0 ? 1 : 0);
         dst.set(value);
     }
 
     private void sla(Register dst) {
-        F.set_carry(dst.read() >> 7);
+        F.setCarry(dst.read() >> 7);
         int value = dst.read() << 1;
         value &= 0xFE;
         value &= 0xff;
-        F.set_zero(value == 0 ? 1 : 0);
+        F.setZero(value == 0 ? 1 : 0);
         dst.set(value);
     }
 
     private void sla(RegisterPair dst) {
         int value = mmu.readByte(dst.read()) << 1;
-        F.set_carry(value >> 7);
+        F.setCarry(value >> 7);
         value &= 0xFE;
         value &= 0xff;
-        F.set_zero(value == 0 ? 1 : 0);
+        F.setZero(value == 0 ? 1 : 0);
         dst.set(value);
     }
 
@@ -398,103 +398,103 @@ public class CPU implements Runnable {
         int r = dst.read();
         int value = ((r << 4) | (r >> 4)) & 0xFF;
         dst.set(value);
-        F.set_zero(value == 0 ? 1 : 0);
-        F.set_operation(0);
-        F.set_half_carry(0);
-        F.set_carry(0);
+        F.setZero(value == 0 ? 1 : 0);
+        F.setOperation(0);
+        F.setHalfCarry(0);
+        F.setCarry(0);
     }
 
     private void swap(RegisterPair dst) {
         int r = mmu.readByte(dst.read());
         int value = ((r << 4) | (r >> 4)) & 0xFF;
         mmu.writeByte(HL.read(), value);
-        F.set_zero(value == 0 ? 1 : 0);
-        F.set_operation(0);
-        F.set_half_carry(0);
-        F.set_carry(0);
+        F.setZero(value == 0 ? 1 : 0);
+        F.setOperation(0);
+        F.setHalfCarry(0);
+        F.setCarry(0);
     }
 
     private void rrc(Register dst) {
-        F.set_carry(dst.read() & 0x01);
+        F.setCarry(dst.read() & 0x01);
         int value = Integer.rotateRight(dst.read(), 1);
-        value |= F.get_carry() << 7;
+        value |= F.getCarry() << 7;
         value &= 0xff;
-        F.set_zero(value == 0 ? 1 : 0);
+        F.setZero(value == 0 ? 1 : 0);
         dst.set(value & 0xFF);
     }
 
     private void rrc(RegisterPair dst) {
         int value = Integer.rotateRight(mmu.readByte(dst.read()), 1);
-        F.set_carry(value & 0x01);
+        F.setCarry(value & 0x01);
         value &= value << 7;
         value &= 0xff;
-        F.set_zero(value == 0 ? 1 : 0);
+        F.setZero(value == 0 ? 1 : 0);
         dst.set(value);
     }
 
     private void rr(Register dst) {
         int value = Integer.rotateRight(dst.read(), 1);
         value &= 0xFF;
-        value |= (F.get_carry() << 7);
-        F.set_carry(dst.read() & 0x01);
-        F.set_zero((value == 0) ? 1 : 0);
-        F.set_operation(0);
-        F.set_half_carry(0);
+        value |= (F.getCarry() << 7);
+        F.setCarry(dst.read() & 0x01);
+        F.setZero((value == 0) ? 1 : 0);
+        F.setOperation(0);
+        F.setHalfCarry(0);
         dst.set(value);
     }
 
     private void rr(RegisterPair dst) {
         int value = Integer.rotateRight(mmu.readByte(dst.read()), 1);
-        value |= F.get_carry() << 7;
-        F.set_carry(value & 0x01);
+        value |= F.getCarry() << 7;
+        F.setCarry(value & 0x01);
 
         dst.set(value);
     }
 
     private void srl(Register dst) {
-        F.set_carry(dst.read() & 0x01);
+        F.setCarry(dst.read() & 0x01);
         int value = dst.read() >> 1;
         value &= 0x7F;
-        F.set_zero(value == 0 ? 1 : 0);
-        F.set_operation(0);
-        F.set_half_carry(0);
+        F.setZero(value == 0 ? 1 : 0);
+        F.setOperation(0);
+        F.setHalfCarry(0);
         dst.set(value);
     }
 
     private void srl(RegisterPair dst) {
         int value = mmu.readByte(dst.read()) >> 1;
-        F.set_carry(value & 0x01);
+        F.setCarry(value & 0x01);
         value &= 0x7F;
         dst.set(value);
     }
 
     private void sra(Register dst) {
-        F.set_carry(dst.read() & 0x01);
+        F.setCarry(dst.read() & 0x01);
         int value = dst.read() >> 1;
         int prev = dst.read() & 0x80;
         value |= prev;
-        F.set_zero(((value & 0xFF) == 0 ? 1 : 0));
+        F.setZero(((value & 0xFF) == 0 ? 1 : 0));
         dst.set(value);
     }
 
     private void sra(RegisterPair dst) {
         int value = mmu.readByte(dst.read()) >> 1;
         int prev = dst.read() & 0x80;
-        F.set_carry(value & 0x01);
+        F.setCarry(value & 0x01);
         value |= prev;
         dst.set(value);
     }
 
     private void bit(Register reg, int n) {
-        F.set_half_carry(1);
-        F.set_operation(0);
-        F.set_zero(((reg.read()>>n) & 0x01) == 0 ? 1 : 0);
+        F.setHalfCarry(1);
+        F.setOperation(0);
+        F.setZero(((reg.read()>>n) & 0x01) == 0 ? 1 : 0);
     }
 
     private void bit(RegisterPair reg, int n) {
-        F.set_half_carry(1);
-        F.set_operation(0);
-        F.set_zero((((mmu.readByte(reg.read())>>n) & 0x01) == 0) ? 1 : 0);
+        F.setHalfCarry(1);
+        F.setOperation(0);
+        F.setZero((((mmu.readByte(reg.read())>>n) & 0x01) == 0) ? 1 : 0);
     }
 
     private void set(Register reg, int n) {
@@ -513,7 +513,7 @@ public class CPU implements Runnable {
         reg.set(mmu.readByte(reg.read()) & ~(0x1 << n));
     }
 
-    private Register get_register(int reg) {
+    private Register getRegister(int reg) {
         if (reg == 0) return B;
         else if (reg == 1) return C;
         else if (reg == 2) return D;
@@ -562,25 +562,25 @@ public class CPU implements Runnable {
         mmu.writeByte(sp.read(), val & 0x00FF);
     }
 
-    private int half_carry_add8(int first_num, int second_num) {
-        return (((first_num & 0x0F) + (second_num & 0x0F))) > 0x0F ? 1 : 0;
+    private int halfCarryAdd8(int firstNum, int secondNum) {
+        return (((firstNum & 0x0F) + (secondNum & 0x0F))) > 0x0F ? 1 : 0;
 //        return (((first_num & 0x0F) + (second_num & 0x0F)) & 0x10) == 0x10 ? 1 : 0;
     }
 
-    private int half_carry_add16(int first_num, int second_num) {
-        return ((first_num & 0x0fff) + (second_num & 0x0fff)) > 0x0fff ? 1: 0;
+    private int halfCarryAdd16(int firstNum, int secondNum) {
+        return ((firstNum & 0x0fff) + (secondNum & 0x0fff)) > 0x0fff ? 1: 0;
     }
 
 
-    private int half_carry_sub8(int first_num, int second_num) {
-        return (first_num & 0x0F) - (second_num & 0x0F) < 0 ? 1 : 0;
+    private int halfCarrySub8(int firstNum, int secondNum) {
+        return (firstNum & 0x0F) - (secondNum & 0x0F) < 0 ? 1 : 0;
     }
 
     private int getSignedInt(int n) {
         return (-256) | (n);
     }
 
-    private void execute_op_code(int op_code) {
+    private void executeOpCode(int opCode) {
         // 0x [d1][d0]
         String out =    "A:" + String.format("%02X", A.read()) +
                         " F:" + String.format("%02X", F.read()) +
@@ -593,198 +593,198 @@ public class CPU implements Runnable {
                         " SP:" + String.format("%04X", sp.read()) +
                         " PC:" + String.format("%04X", pc.read()) +
                         " PCMEM:"+
-                            String.format("%02X",op_code) + "," +
+                            String.format("%02X",opCode) + "," +
                             String.format("%02X", mmu.readByte(pc.read()+1))+ "," +
                             String.format("%02X", mmu.readByte(pc.read()+2))+ "," +
                             String.format("%02X", mmu.readByte(pc.read()+3));
         System.out.println(out);
-        int d1 = op_code >> 4;
-        int d0 = op_code & 0x0F;
-        if (op_code == 0x10) stop = true;
-        else if (op_code == 0x76) halt = true;
-        else if (op_code == 0x3A) {
-            load_src_ind(A, HL);
+        int d1 = opCode >> 4;
+        int d0 = opCode & 0x0F;
+        if (opCode == 0x10) stop = true;
+        else if (opCode == 0x76) halt = true;
+        else if (opCode == 0x3A) {
+            loadSrcInd(A, HL);
             HL.decrement();
-        } else if (op_code == 0xF8) {
+        } else if (opCode == 0xF8) {
             pc.increment();
             int n = mmu.readByte(pc.read());
             int val;
-            F.set_carry(((sp.read() & 0xFF) + (n & 0xFF)) > 0xFF ? 1 : 0);
-            F.set_half_carry(((sp.read() & 0xF) + (n & 0xF)) > 0xF ? 1 : 0);
+            F.setCarry(((sp.read() & 0xFF) + (n & 0xFF)) > 0xFF ? 1 : 0);
+            F.setHalfCarry(((sp.read() & 0xF) + (n & 0xF)) > 0xF ? 1 : 0);
             if (n > 128) n = getSignedInt(n);
             val = n + sp.read();
-            F.set_zero(0);
-            F.set_operation(0);
+            F.setZero(0);
+            F.setOperation(0);
             HL.set(val & 0xFFFF);
-        } else if (op_code == 0xE8) {
+        } else if (opCode == 0xE8) {
             pc.increment();
             int n = mmu.readByte(pc.read());
             int val;
-            F.set_carry(((sp.read() & 0xFF) + (n & 0xFF)) > 0xFF ? 1 : 0);
-            F.set_half_carry(((sp.read() & 0xF) + (n & 0xF)) > 0xF ? 1 : 0);
+            F.setCarry(((sp.read() & 0xFF) + (n & 0xFF)) > 0xFF ? 1 : 0);
+            F.setHalfCarry(((sp.read() & 0xF) + (n & 0xF)) > 0xF ? 1 : 0);
             if (n > 128) n = getSignedInt(n);
             val = n + sp.read();
-            F.set_zero(0);
-            F.set_operation(0);
+            F.setZero(0);
+            F.setOperation(0);
             sp.set(val & 0xFFFF);
         }
-        else if (op_code == 0xF9) {
+        else if (opCode == 0xF9) {
             sp.set(HL.read());
-        } else if (op_code == 0xCB) {
+        } else if (opCode == 0xCB) {
             pc.increment();
-            execute_cb(mmu.readByte(pc.read()));
-        } else if (op_code == 0x22) {
-            load_dst_ind(HL, A);
+            executeCB(mmu.readByte(pc.read()));
+        } else if (opCode == 0x22) {
+            loadDstInd(HL, A);
             HL.increment();
-        } else if (op_code == 0x32) {
-            load_dst_ind(HL, A);
+        } else if (opCode == 0x32) {
+            loadDstInd(HL, A);
             HL.decrement();
-        } else if (op_code == 0xE6) {
+        } else if (opCode == 0xE6) {
             pc.increment();
             int n = mmu.readByte(pc.read());
             and(A, n);
-        } else if (op_code == 0xEE) {
+        } else if (opCode == 0xEE) {
             pc.increment();
             int n = mmu.readByte(pc.read());
             xor(A, n);
-        } else if (op_code == 0xF6) {
+        } else if (opCode == 0xF6) {
             pc.increment();
             int n = mmu.readByte(pc.read());
             or(A, n);
-        } else if (op_code == 0xFE) {
+        } else if (opCode == 0xFE) {
             pc.increment();
             int n = mmu.readByte(pc.read());
             cp(A, n);
-        } else if (op_code == 0xC6 || op_code == 0xCE) {
+        } else if (opCode == 0xC6 || opCode == 0xCE) {
             pc.increment();
             int n = mmu.readByte(pc.read());
-            add(A, n, (op_code == 0xCE && F.get_carry() == 1) ? 1 : 0);
-        } else if (op_code == 0xD6 || op_code == 0xDE) {
+            add(A, n, (opCode == 0xCE && F.getCarry() == 1) ? 1 : 0);
+        } else if (opCode == 0xD6 || opCode == 0xDE) {
             pc.increment();
             int n = mmu.readByte(pc.read());
-            sub(A, n, (op_code == 0xDE && F.get_carry() == 1) ? 1: 0);
+            sub(A, n, (opCode == 0xDE && F.getCarry() == 1) ? 1: 0);
         } else if (d1 == 0x0B && d0 >= 0x08) {
             if (d0 == 0x0E) {
-                cp_ind(A, HL);
+                cpInd(A, HL);
             } else {
-                Register dst = get_register(0b00000111 & op_code);
+                Register dst = getRegister(0b00000111 & opCode);
                 assert dst != null;
                 cp(A, dst);
             }
-        } else if (op_code == 0xFA) {
+        } else if (opCode == 0xFA) {
             int nn = mmu.readWord(pc.read()+1);
             int val = mmu.readByte(nn);
-            load_imm8(A, val);
+            loadImm8(A, val);
             pc.increment();
             pc.increment();
-        } else if (op_code == 0xE9) {
+        } else if (opCode == 0xE9) {
             pc.set(HL.read()-1);
-        } else if (op_code == 0xE0) {
-            load_dst_ind(mmu.readByte(pc.read()+1) + 0xFF00, A);
+        } else if (opCode == 0xE0) {
+            loadDstInd(mmu.readByte(pc.read()+1) + 0xFF00, A);
             pc.increment();
-        } else if (op_code == 0xEA) {
+        } else if (opCode == 0xEA) {
             // load (nn), A
-            load_dst_ind(mmu.readWord(pc.read()+1), A);
+            loadDstInd(mmu.readWord(pc.read()+1), A);
             pc.increment();
             pc.increment();
-        } else if (op_code == 0xF0) {
+        } else if (opCode == 0xF0) {
             int addr = mmu.readByte(pc.read()+1) + 0xff00;
             int val = mmu.readByte(addr);
             A.set(val);
             pc.increment();
         } else if (d1 == 0x07 && d0 <= 0x07) {
-            Register reg = get_register(d0);
+            Register reg = getRegister(d0);
             assert reg != null;
-            load_dst_ind(HL, reg);
-        } else if (op_code >= 0x40 && op_code < 0x80) {
+            loadDstInd(HL, reg);
+        } else if (opCode >= 0x40 && opCode < 0x80) {
             // ld
-            int src = op_code & 0b00000111;
-            int dst = (op_code & 0b00111000) >> 3;
-            Register src_reg = get_register(op_code & 0b00000111);
-            Register dst_reg = get_register((op_code & 0b00111000) >> 3);
+            int src = opCode & 0b00000111;
+            int dst = (opCode & 0b00111000) >> 3;
+            Register srcReg = getRegister(opCode & 0b00000111);
+            Register dstReg = getRegister((opCode & 0b00111000) >> 3);
             if (src == 0x06) {
-                assert dst_reg != null;
-                load_src_ind(dst_reg, HL);
+                assert dstReg != null;
+                loadSrcInd(dstReg, HL);
             } else if (dst == 0x06) {
-                assert src_reg != null;
-                load_dst_ind(HL, src_reg);
+                assert srcReg != null;
+                loadDstInd(HL, srcReg);
             } else {
-                assert dst_reg != null;
-                assert src_reg != null;
-                load(dst_reg, src_reg);
+                assert dstReg != null;
+                assert srcReg != null;
+                load(dstReg, srcReg);
             }
 
-        } else if (op_code >= 0x80 && op_code < 0x90) {
+        } else if (opCode >= 0x80 && opCode < 0x90) {
             // add & adc
             if (d0 == 0x06 || d0 == 0x0E) {
-                add_ind(A, HL, (d0 == 0x0E && F.get_carry() == 1) ? 1 : 0);
+                addInd(A, HL, (d0 == 0x0E && F.getCarry() == 1) ? 1 : 0);
             } else {
-                int dst = op_code & 0b00000111;
-                Register dst_reg = get_register(dst);
-                assert dst_reg != null;
-                add(A, dst_reg, (op_code > 0x87 && F.get_carry() == 1) ? 1 : 0);
+                int dst = opCode & 0b00000111;
+                Register srcReg = getRegister(dst);
+                assert srcReg != null;
+                add(A, srcReg, (opCode > 0x87 && F.getCarry() == 1) ? 1 : 0);
             }
-        } else if (op_code >= 0x90 && op_code < 0xA0) {
+        } else if (opCode >= 0x90 && opCode < 0xA0) {
             // sub & sbc
             if (d0 == 0x06 || d0 == 0x0E) {
-                sub_ind(A, HL, (d0 == 0x0E && F.get_carry() == 1) ? 1 : 0);
+                subInd(A, HL, (d0 == 0x0E && F.getCarry() == 1) ? 1 : 0);
             } else {
-                int dst = op_code & 0b00000111;
-                Register dst_reg = get_register(dst);
-                assert dst_reg != null;
-                sub(A, dst_reg, (op_code > 0x97 && F.get_carry() == 1) ? 1 : 0);
+                int dst = opCode & 0b00000111;
+                Register dstReg = getRegister(dst);
+                assert dstReg != null;
+                sub(A, dstReg, (opCode > 0x97 && F.getCarry() == 1) ? 1 : 0);
             }
-        } else if (op_code >= 0xA0 && op_code < 0xA8) {
+        } else if (opCode >= 0xA0 && opCode < 0xA8) {
             // and
-            if (op_code == 0xA6) {
+            if (opCode == 0xA6) {
                 // mem
-                and_ind(A, HL);
+                andInd(A, HL);
             } else {
-                Register dst_reg = get_register(op_code & 0b00000111);
-                assert dst_reg != null;
-                and(A, dst_reg);
+                Register dstReg = getRegister(opCode & 0b00000111);
+                assert dstReg != null;
+                and(A, dstReg);
             }
-        } else if (op_code >= 0xA8 && op_code < 0xB0) {
+        } else if (opCode >= 0xA8 && opCode < 0xB0) {
             // xor
-            if (op_code == 0xAe) {
+            if (opCode == 0xAe) {
                 // mem
-                xor_ind(A, HL);
+                xorInd(A, HL);
             } else {
-                Register dst_reg = get_register(op_code & 0b00000111);
-                assert dst_reg != null;
-                xor(A, dst_reg);
+                Register dstReg = getRegister(opCode & 0b00000111);
+                assert dstReg != null;
+                xor(A, dstReg);
             }
-        } else if (op_code >= 0xB0 && op_code < 0xB8) {
+        } else if (opCode >= 0xB0 && opCode < 0xB8) {
             // or
-            if (op_code == 0xB6) {
+            if (opCode == 0xB6) {
                 // mem
-                or_ind(A, HL);
+                orInd(A, HL);
             } else {
-                Register dst_reg = get_register(op_code & 0b00000111);
-                assert dst_reg != null;
-                or(A, dst_reg);
+                Register dstReg = getRegister(opCode & 0b00000111);
+                assert dstReg != null;
+                or(A, dstReg);
             }
-        } else if (op_code >= 0xB8 && op_code < 0xC0 ) {
+        } else if (opCode >= 0xB8 && opCode < 0xC0 ) {
             // cp
-            Register dst = get_register(op_code & 0x07);
-            if (dst == null) cp_ind(A, HL);
+            Register dst = getRegister(opCode & 0x07);
+            if (dst == null) cpInd(A, HL);
             else cp(A,dst);
-        } else if (op_code == 0xC0) {
+        } else if (opCode == 0xC0) {
             // RET NZ
-            if (F.get_zero() == 0) pop();
-        } else if (op_code == 0xC8) {
+            if (F.getZero() == 0) pop();
+        } else if (opCode == 0xC8) {
             // RET Z
-            if (F.get_zero() != 0) pop();
-        } else if (op_code == 0xD0) {
+            if (F.getZero() != 0) pop();
+        } else if (opCode == 0xD0) {
             // RET NC
-            if (F.get_carry() == 0) pop();
-        } else if (op_code == 0xD8) {
+            if (F.getCarry() == 0) pop();
+        } else if (opCode == 0xD8) {
             // RET C
-            if (F.get_carry() != 0) pop();
-        } else if (op_code == 0xC9) {
+            if (F.getCarry() != 0) pop();
+        } else if (opCode == 0xC9) {
             // RET
            pop();
-        } else if (op_code == 0xD9) {
+        } else if (opCode == 0xD9) {
             // RETI
             int low = mmu.readByte(sp.read());
             sp.increment();
@@ -797,21 +797,21 @@ public class CPU implements Runnable {
             // RST
             pc.increment();
             push(pc);
-            if (op_code == 0xC7) {
+            if (opCode == 0xC7) {
                 pc.set(0x00);
-            } else if (op_code == 0xCF) {
+            } else if (opCode == 0xCF) {
                 pc.set(0x08);
-            } else if (op_code == 0xD7) {
+            } else if (opCode == 0xD7) {
                 pc.set(0x10);
-            } else if (op_code == 0xDF) {
+            } else if (opCode == 0xDF) {
                 pc.set(0x18);
-            } else if (op_code == 0xE7) {
+            } else if (opCode == 0xE7) {
                 pc.set(0x20);
-            } else if (op_code == 0xEF) {
+            } else if (opCode == 0xEF) {
                 pc.set(0x28);
-            } else if (op_code == 0xF7) {
+            } else if (opCode == 0xF7) {
                 pc.set(0x30);
-            } else if (op_code == 0xFF) {
+            } else if (opCode == 0xFF) {
                 pc.set(0x38);
             }
             pc.decrement();
@@ -837,7 +837,7 @@ public class CPU implements Runnable {
                 if (d1 == 0x0) dec(B);
                 else if (d1 == 0x1) dec(D);
                 else if (d1 == 0x2) dec(H);
-                else if (d1 == 0x3) dec_ind(HL);
+                else if (d1 == 0x3) decInd(HL);
 
             } else if (d0 == 0xC) {
                 if (d1 == 0x0) inc(C);
@@ -850,24 +850,24 @@ public class CPU implements Runnable {
                 else if (d1 == 0x2) inc(H);
                 else if (d1 == 0x3) inc(HL);
             }
-        } else if (op_code == 0x34) {
-            inc_ind(HL);
+        } else if (opCode == 0x34) {
+            incInd(HL);
         } else if (d1 < 0x04 && (d0 == 0x06 || d0 == 0x0E)) {
             // LD REG, n
             int n = mmu.readByte(pc.read()+1);
-            Register dst = get_register((op_code & 0b00111000) >> 3);
+            Register dst = getRegister((opCode & 0b00111000) >> 3);
             if (dst == null) {
                 mmu.writeByte(HL.read(), n);
             } else {
-                load_imm8(dst, n);
+                loadImm8(dst, n);
             }
             pc.increment();
         } else if (d1 < 0x04 && d0 == 0x01) {
             // LD REG PAIR, nn
             int nn = mmu.readWord(pc.read()+1);
-            if (d1 == 0x00) load_imm16(BC, nn);
-            else if (d1 == 0x01) load_imm16(DE, nn);
-            else if (d1 == 0x02) load_imm16(HL, nn);
+            if (d1 == 0x00) loadImm16(BC, nn);
+            else if (d1 == 0x01) loadImm16(DE, nn);
+            else if (d1 == 0x02) loadImm16(HL, nn);
             else sp.set(nn);
             pc.increment();
             pc.increment();
@@ -882,21 +882,21 @@ public class CPU implements Runnable {
             } else {
                 int hl = HL.read() & 0xFFFF;
                 add(HL, sp);
-                F.set_half_carry(half_carry_add16(hl, sp.read() & 0xFFFF));
+                F.setHalfCarry(halfCarryAdd16(hl, sp.read() & 0xFFFF));
             }
-        } else if (op_code == 0x02 || op_code == 0x12) {
+        } else if (opCode == 0x02 || opCode == 0x12) {
             // LD (BC) or (DE), A
-            if (op_code == 0x02) {
-                load_dst_ind(BC, A);
+            if (opCode == 0x02) {
+                loadDstInd(BC, A);
             } else {
-                load_dst_ind(DE, A);
+                loadDstInd(DE, A);
             }
-        } else if (op_code == 0x0A || op_code == 0x1A) {
+        } else if (opCode == 0x0A || opCode == 0x1A) {
             // LD A, (BC) or (DE)
-            if (op_code == 0x0A) {
-                load_src_ind(A, BC);
+            if (opCode == 0x0A) {
+                loadSrcInd(A, BC);
             } else {
-                load_src_ind(A, DE);
+                loadSrcInd(A, DE);
             }
         } else if (d1 >= 0x0C && d0 == 0x01) {
             // POP
@@ -920,21 +920,21 @@ public class CPU implements Runnable {
             // JP flag nn
             pc.increment();
             int nn = mmu.readWord(pc.read());
-            if (op_code == 0xC2 && F.get_zero() == 0) pc.set(nn-1);
-            else if (op_code == 0xCA && F.get_zero() == 1) pc.set(nn-1);
-            else if (op_code == 0xD2 && F.get_carry() == 0) pc.set(nn-1);
-            else if (op_code == 0xDA && F.get_carry() == 1) pc.set(nn-1);
+            if (opCode == 0xC2 && F.getZero() == 0) pc.set(nn-1);
+            else if (opCode == 0xCA && F.getZero() == 1) pc.set(nn-1);
+            else if (opCode == 0xD2 && F.getCarry() == 0) pc.set(nn-1);
+            else if (opCode == 0xDA && F.getCarry() == 1) pc.set(nn-1);
             else pc.increment();
-        } else if (op_code == 0xC3) {
+        } else if (opCode == 0xC3) {
             // JP nn
             int nn = mmu.readWord(pc.read()+1);
             pc.set(nn-1);
         } else if ((d1 >= 0x0C && d1 < 0x0E) && (d0 == 0x04 || d0 == 0x0C)) {
             // CALL flag, nn
-            if ((op_code == 0xC4 && F.get_zero() == 0) ||
-                (op_code == 0xCC && F.get_zero() == 1) ||
-                (op_code == 0xD4 && F.get_carry() == 0) ||
-                (op_code == 0xDC && F.get_carry() == 1)) {
+            if ((opCode == 0xC4 && F.getZero() == 0) ||
+                (opCode == 0xCC && F.getZero() == 1) ||
+                (opCode == 0xD4 && F.getCarry() == 0) ||
+                (opCode == 0xDC && F.getCarry() == 1)) {
                 int nn = mmu.readWord(pc.read()+1);
                 push(pc.read()+3);
                 pc.set(nn-1);
@@ -942,7 +942,7 @@ public class CPU implements Runnable {
                 pc.increment();
                 pc.increment();
             }
-        } else if (op_code == 0xCD) {
+        } else if (opCode == 0xCD) {
             // CALL nn
             int nn = mmu.readWord(pc.read()+1);
             push(pc.read()+3);
@@ -962,13 +962,13 @@ public class CPU implements Runnable {
                 sp.decrement();
                 mmu.writeByte(sp.read(), F.read());
             }
-        } else if (op_code == 0x08) {
+        } else if (opCode == 0x08) {
             // LD (nn) SP
             int nn = mmu.readWord(pc.read()+1);
-            load_imm16(nn, sp);
+            loadImm16(nn, sp);
             pc.increment();
             pc.increment();
-        } else if (op_code == 0x18) {
+        } else if (opCode == 0x18) {
             // JR n
             int n = mmu.readByte(pc.read()+1);
             if (n > 128) {
@@ -978,10 +978,10 @@ public class CPU implements Runnable {
             pc.increment();
         } else if ((d1 >= 0x02 && d1 < 0x04) && (d0 == 0x00 || d0 == 0x08)) {
             // JR flag nn
-            if ((op_code == 0x20 && F.get_zero() == 0 )||
-                (op_code == 0x28 && F.get_zero() == 1) ||
-                (op_code == 0x30 && F.get_carry() == 0) ||
-                (op_code == 0x38 && F.get_carry() == 1) ) {
+            if ((opCode == 0x20 && F.getZero() == 0 )||
+                (opCode == 0x28 && F.getZero() == 1) ||
+                (opCode == 0x30 && F.getCarry() == 0) ||
+                (opCode == 0x38 && F.getCarry() == 1) ) {
                 int n = mmu.readByte(pc.read()+1);
                 if (n > 128) {
                     n = getSignedInt(n);
@@ -989,62 +989,62 @@ public class CPU implements Runnable {
                 pc.set(pc.read() + n);
             }
             pc.increment();
-        } else if (op_code == 0x2A) {
-            load_src_ind(A, HL);
+        } else if (opCode == 0x2A) {
+            loadSrcInd(A, HL);
             HL.increment();
-        } else if (op_code == 0x0F) {
+        } else if (opCode == 0x0F) {
             // rrc a
             rrc(A);
-            F.set_operation(0);
-            F.set_zero(0);
-            F.set_half_carry(0);
-        } else if (op_code == 0x1F) {
+            F.setOperation(0);
+            F.setZero(0);
+            F.setHalfCarry(0);
+        } else if (opCode == 0x1F) {
             // rr a
             rr(A);
-            F.set_operation(0);
-            F.set_zero(0);
-            F.set_half_carry(0);
-        } else if (op_code == 0x2F) {
+            F.setOperation(0);
+            F.setZero(0);
+            F.setHalfCarry(0);
+        } else if (opCode == 0x2F) {
             // cpl
             int val = ~A.read() & 0xFF;
             A.set(val);
-            F.set_half_carry(1);
-            F.set_operation(1);
-        } else if (op_code == 0x3F) {
+            F.setHalfCarry(1);
+            F.setOperation(1);
+        } else if (opCode == 0x3F) {
             // ccf
-            int val = F.get_carry() == 1 ? 0 : 1;
-            F.set_carry(val);
-            F.set_operation(0);
-            F.set_half_carry(0);
-        } else if (op_code == 0x07) {
+            int val = F.getCarry() == 1 ? 0 : 1;
+            F.setCarry(val);
+            F.setOperation(0);
+            F.setHalfCarry(0);
+        } else if (opCode == 0x07) {
             // rlc a
             rlc(A);
-            F.set_operation(0);
-            F.set_half_carry(0);
-            F.set_zero(0);
-        } else if (op_code == 0x17) {
+            F.setOperation(0);
+            F.setHalfCarry(0);
+            F.setZero(0);
+        } else if (opCode == 0x17) {
             // rl a
             rl(A);
-            F.set_operation(0);
-            F.set_half_carry(0);
-            F.set_zero(0);
-        } else if (op_code == 0x27) {
+            F.setOperation(0);
+            F.setHalfCarry(0);
+            F.setZero(0);
+        } else if (opCode == 0x27) {
             // daa
-        } else if (op_code == 0x37) {
+        } else if (opCode == 0x37) {
             // scf
-            F.set_carry(1);
-            F.set_operation(0);
-            F.set_half_carry(0);
+            F.setCarry(1);
+            F.setOperation(0);
+            F.setHalfCarry(0);
         }
     }
 
-    private void execute_cb(int arg) {
+    private void executeCB(int arg) {
         int d1 = arg >> 4;
         int d0 = arg & 0x0F;
-        Register reg = get_register(d0 & 0x07);
+        Register reg = getRegister(d0 & 0x07);
         if (d1 <= 0x03) {
-            F.set_half_carry(0);
-            F.set_operation(0);
+            F.setHalfCarry(0);
+            F.setOperation(0);
         }
         if (d1 == 0x00) {
             //rotate (rlc)
@@ -1165,11 +1165,12 @@ public class CPU implements Runnable {
     @Override
     public void run() {
         while (!stop) {
-            int curr_instr = mmu.readByte(pc.read());
-            execute_op_code(curr_instr);
+            int currInstr = mmu.readByte(pc.read());
+            executeOpCode(currInstr);
             pc.increment();
             if (mmu.readByte(0xff02) == 0x81) {
                 testOutput += (char)mmu.readByte(0xff01);
+//                System.out.println(testOutput);
                 mmu.writeByte(0xff02, 0x00);
             }
         }

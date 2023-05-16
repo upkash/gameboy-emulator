@@ -56,7 +56,7 @@ public class MMU  {
     private final TileMapContainer tileMaps;
 
 
-    public MMU(String rom_path) {
+    public MMU(String romPath) {
         wram = new int[0x2000];
         eram = new int[0x2000];
         vram = new int[0x2000];
@@ -66,7 +66,7 @@ public class MMU  {
         wrams = new int[0x1E00];
         System.arraycopy(boot_loader, 0, boot, 0, boot_loader.length);
         try {
-            rom = load_rom(rom_path);
+            rom = loadRom(romPath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +74,7 @@ public class MMU  {
         tileMaps = new TileMapContainer(tileSet);
     }
 
-    private int[] load_rom(String fileName) throws IOException {
+    private int[] loadRom(String fileName) throws IOException {
         byte[] cartridgeMemory = new byte[0x8000];
 
         try {
