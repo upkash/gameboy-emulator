@@ -597,12 +597,15 @@ public class CPU implements Runnable {
                             String.format("%02X", mmu.readByte(pc.read()+1))+ "," +
                             String.format("%02X", mmu.readByte(pc.read()+2))+ "," +
                             String.format("%02X", mmu.readByte(pc.read()+3));
-//        System.out.println(out);
+        System.out.println(out);
         int d1 = op_code >> 4;
         int d0 = op_code & 0x0F;
         if (op_code == 0x10) stop = true;
         else if (op_code == 0x76) halt = true;
-        else if (op_code == 0xF8) {
+        else if (op_code == 0x3A) {
+            load_src_ind(A, HL);
+            HL.decrement();
+        } else if (op_code == 0xF8) {
             pc.increment();
             int n = mmu.readByte(pc.read());
             int val;
@@ -1176,7 +1179,7 @@ public class CPU implements Runnable {
 
 
     public static void main (String[] args) {
-        MMU mmu = new MMU("/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/10-bit ops.gb");
+        MMU mmu = new MMU("/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/11-op a,(hl).gb");
         CPU cpu = new CPU(mmu);
         mmu.writeByte(0xFF44, 0x90);
         cpu.run();

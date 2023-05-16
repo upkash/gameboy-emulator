@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Passing a few tests, fixing some MMU stuff">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Added unit tests, going to try to pass all tests now">
       <change beforePath="$PROJECT_DIR$/src/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/CPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory/MMU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/CPUTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/CPUTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +57,7 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.CPUTest">
+  <component name="RunManager" selected="Application.CPU">
     <configuration name="CPU" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <output_file path="output.txt" is_save="true" />
       <option name="MAIN_CLASS_NAME" value="cpu.CPU" />
@@ -140,10 +137,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.CPU" />
         <item itemvalue="JUnit.CPUTest" />
         <item itemvalue="JUnit.CPUTest.op_r_imm" />
         <item itemvalue="JUnit.CPUTest.bit_ops" />
-        <item itemvalue="Application.CPU" />
         <item itemvalue="JUnit.CPUTest.op_r_r" />
       </list>
     </recent_temporary>
@@ -276,7 +273,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684220071283</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Added unit tests, going to try to pass all tests now">
+      <created>1684274517941</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1684274517941</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -289,7 +293,8 @@
     <MESSAGE value="Slight clean up" />
     <MESSAGE value="Fixed some instructions, about to add CB instructions" />
     <MESSAGE value="Passing a few tests, fixing some MMU stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="Passing a few tests, fixing some MMU stuff" />
+    <MESSAGE value="Added unit tests, going to try to pass all tests now" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added unit tests, going to try to pass all tests now" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
