@@ -3,7 +3,6 @@ package memory;
 import gpu.Tile;
 import gpu.TileMapContainer;
 import gpu.TileSet;
-import gpu.TileMap;
 import java.io.*;
 
 
@@ -50,6 +49,7 @@ public class MMU  {
     private final int[] oam;
     private final int[] io;
     private final int[] hram;
+    private final int[] wrams;
 
     private final TileSet tileSet;
 
@@ -63,6 +63,7 @@ public class MMU  {
         oam = new int[0xA0];
         io = new int[0x80];
         hram = new int[0x80];
+        wrams = new int[0x1E00];
         System.arraycopy(boot_loader, 0, boot, 0, boot_loader.length);
         try {
             rom = load_rom(rom_path);
@@ -101,8 +102,6 @@ public class MMU  {
             case 0x5000:
             case 0x6000:
             case 0x7000:
-            case 0xE000:
-                throw new IndexOutOfBoundsException();
             case 0x8000:
 //                tileSet.setTileVal(address, value);
             case 0x9000:
@@ -120,7 +119,12 @@ public class MMU  {
             case 0xC000:    // internal RAM
             case 0xD000:
                 wram[address & 0x1FFF] = value;
+                if (address < 0xDDFF) {
+                    wrams[address & 0x1FFF] = value;
+                }
                 break;
+            case 0xE000:
+                throw new IndexOutOfBoundsException();
             case 0xF000:
                 if (address >= 0xFE00 && address <= 0xFE9F) oam[address & 0x00FF] = value;
                 else if (address < 0xFF4C) io[address - 0xFF00] = value;
@@ -164,9 +168,9 @@ public class MMU  {
             case 0xD000:
                 return wram[address & 0x1FFF];
             case 0xE000:
-                throw new IndexOutOfBoundsException();
             case 0xF000:
-                if (address >= 0xFE00 && address <= 0xFE9F) return oam[address & 0x00FF];
+                if (address <= 0xFDFF) return wrams[address & 0x1FFF];
+                else if (address <= 0xFE9F) return oam[address & 0x00FF];
                 else if (address < 0xFF4C) return io[address - 0xFF00];
                 else if (address <= 0xFFFF) return hram[address - 0xFF80];
                 else throw new IndexOutOfBoundsException();
