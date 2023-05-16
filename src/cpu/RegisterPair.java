@@ -13,7 +13,7 @@ public class RegisterPair {
     }
 
     public void set(int val) {
-        reg1.set(val >> 8);
+        reg1.set((val >> 8) & 0xFF);
         reg2.set(val & 0x00FF);
     }
 

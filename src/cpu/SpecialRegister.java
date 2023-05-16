@@ -8,12 +8,14 @@ public class SpecialRegister extends Register{
     @Override
     public int increment() {
         this.value++;
-        return this.value & 0xFFFF;
+        this.value &= 0xFFFF;
+        return this.value;
     }
 
     @Override
     public int decrement() {
         this.value--;
-        return this.value & 0xFFFF;
+        this.value &= 0xFFFF;
+        return this.value;
     }
 }

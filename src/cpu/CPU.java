@@ -137,21 +137,24 @@ public class CPU implements Runnable {
                 F.set_half_carry(0);
             }
         }
-//        (half_carry_sub8(dst.read(), src.read()) == 1 ||
-//                half_carry_sub8(dst.read(), carry) == 1 ||
-//                half_carry_sub8(dst.read(), src.read()-carry) == 1){
-//            F.set_half_carry(1);
-//        } else F.set_half_carry(0);
-//        F.set_half_carry(half_carry_sub8(dst.read(), src.read()-carry));
         dst.set(0xFF & val);
     }
 
     private void sub(Register dst, int value, int carry){
         int val = dst.read() - value - carry;
-        F.set_zero((val == 0) ? 1 : 0);
+        F.set_zero(((val & 0xFF)== 0) ? 1 : 0);
         F.set_operation(1);
         F.set_carry((val < 0) ? 1 : 0);
-        F.set_half_carry(half_carry_sub8(dst.read(),value));
+        if (carry == 0) F.set_half_carry(half_carry_sub8(dst.read(), value));
+        else if (value == 0) F.set_half_carry(half_carry_sub8(dst.read(), carry));
+        else if (dst.read() == 0) F.set_half_carry(1);
+        else {
+            if (half_carry_sub8(dst.read()- value, carry) == 1 || half_carry_sub8(dst.read() , value) == 1) {
+                F.set_half_carry(1);
+            } else {
+                F.set_half_carry(0);
+            }
+        }
         dst.set(val & 255);
     }
 
@@ -536,15 +539,30 @@ public class CPU implements Runnable {
 //        return (((first_num & 0x0F) + (second_num & 0x0F)) & 0x10) == 0x10 ? 1 : 0;
     }
 
-    private int half_carry_add16(int first_num, int second_num)
-    {
+    private int half_carry_add16(int first_num, int second_num) {
         return ((first_num & 0x0fff) + (second_num & 0x0fff)) > 0x0fff ? 1: 0;
 //        return (((first_num & 0x00FF) + (second_num & 0x00FF)) & 0x0100) == 0x0100 ? 1: 0;
     }
 
-    private int half_carry_sub8(int first_num, int second_num)
-    {
+    private int sp_carry_add16(int first_num, int second_num) {
+        return ((first_num & 0x00ff) + (second_num & 0x00ff)) > 0x00ff ? 1: 0;
+//        return (((first_num & 0x00FF) + (second_num & 0x00FF)) & 0x0100) == 0x0100 ? 1: 0;
+    }
+
+    private int half_carry_sub8(int first_num, int second_num) {
         return (first_num & 0x0F) - (second_num & 0x0F) < 0 ? 1 : 0;
+    }
+
+    private int sp_carry_sub(int first_num, int second_num) {
+        return (first_num & 0xFF) - (second_num & 0xFF) < 0 ? 1 : 0;
+    }
+
+    private int half_carry_sub16(int first_num, int second_num) {
+        return (first_num & 0x00FF) - (second_num & 0x00FF) < 0 ? 1 : 0;
+    }
+
+    private int getSignedInt(int n) {
+        return (-256) | (n);
     }
 
     private void execute_op_code(int op_code) {
@@ -569,7 +587,32 @@ public class CPU implements Runnable {
         int d0 = op_code & 0x0F;
         if (op_code == 0x10) stop = true;
         else if (op_code == 0x76) halt = true;
-        else if (op_code == 0xCB) {
+        else if (op_code == 0xF8) {
+            pc.increment();
+            int n = mmu.readByte(pc.read());
+            int val;
+            F.set_carry(((sp.read() & 0xFF) + (n & 0xFF)) > 0xFF ? 1 : 0);
+            F.set_half_carry(((sp.read() & 0xF) + (n & 0xF)) > 0xF ? 1 : 0);
+            if (n > 128) n = getSignedInt(n);
+            val = n + sp.read();
+            F.set_zero(0);
+            F.set_operation(0);
+            HL.set(val & 0xFFFF);
+        } else if (op_code == 0xE8) {
+            pc.increment();
+            int n = mmu.readByte(pc.read());
+            int val;
+            F.set_carry(((sp.read() & 0xFF) + (n & 0xFF)) > 0xFF ? 1 : 0);
+            F.set_half_carry(((sp.read() & 0xF) + (n & 0xF)) > 0xF ? 1 : 0);
+            if (n > 128) n = getSignedInt(n);
+            val = n + sp.read();
+            F.set_zero(0);
+            F.set_operation(0);
+            sp.set(val & 0xFFFF);
+        }
+        else if (op_code == 0xF9) {
+            sp.set(HL.read());
+        } else if (op_code == 0xCB) {
             pc.increment();
             execute_cb(mmu.readByte(pc.read()));
         } else if (op_code == 0x22) {
@@ -725,6 +768,13 @@ public class CPU implements Runnable {
            pop();
         } else if (op_code == 0xD9) {
             // RETI
+            int hi = mmu.readByte(sp.read());
+            sp.increment();
+            int low = mmu.readByte(sp.read());
+            sp.increment();
+            int n = hi << 8;
+            n |= low;
+            pc.set(n-1);
         } else if (d1 >= 0xC && (d0 == 0x0F || d0 == 0x07)) {
             // RST
             pc.increment();
@@ -753,12 +803,12 @@ public class CPU implements Runnable {
                 if (d1 == 0x0) inc(BC);
                 else if (d1 == 0x1) inc(DE);
                 else if (d1 == 0x2) inc(HL);
-                else if (d1 == 0x3) inc(sp);
+                else if (d1 == 0x3) sp.increment();
             } else if (d0 == 0xB) {
                 if (d1 == 0x0) dec(BC);
                 else if (d1 == 0x1) dec(DE);
                 else if (d1 == 0x2) dec(HL);
-                else if (d1 == 0x3) dec(sp);
+                else if (d1 == 0x3) sp.decrement();
             } else if (d0 == 0xD) {
                 if (d1 == 0x0) dec(C);
                 else if (d1 == 0x1) dec(E);
@@ -791,8 +841,8 @@ public class CPU implements Runnable {
                 mmu.writeByte(HL.read(), n);
             } else {
                 load_imm8(dst, n);
-                pc.increment();
             }
+            pc.increment();
         } else if (d1 < 0x04 && d0 == 0x01) {
             // LD REG PAIR, nn
             int nn = mmu.readWord(pc.read()+1);
@@ -811,7 +861,9 @@ public class CPU implements Runnable {
             } else if (d1 == 0x02) {
                 add(HL, HL);
             } else {
+                int hl = HL.read() & 0xFFFF;
                 add(HL, sp);
+                F.set_half_carry(half_carry_add16(hl, sp.read() & 0xFFFF));
             }
         } else if (op_code == 0x02 || op_code == 0x12) {
             // LD (BC) or (DE), A
@@ -847,8 +899,13 @@ public class CPU implements Runnable {
             }
         } else if ((d1 >= 0x0C && d1 < 0x0E) && (d0 == 0x02 || d0 == 0x0A)) {
             // JP flag nn
-            int nn = mmu.readWord(pc.read()+1);
-            if (F.get_zero() == 1) pc.set(nn-1);
+            pc.increment();
+            int nn = mmu.readWord(pc.read());
+            if (op_code == 0xC2 && F.get_zero() == 0) pc.set(nn-1);
+            else if (op_code == 0xCA && F.get_zero() == 1) pc.set(nn-1);
+            else if (op_code == 0xD2 && F.get_carry() == 0) pc.set(nn-1);
+            else if (op_code == 0xDA && F.get_carry() == 1) pc.set(nn-1);
+            else pc.increment();
         } else if (op_code == 0xC3) {
             // JP nn
             int nn = mmu.readWord(pc.read()+1);
@@ -904,7 +961,7 @@ public class CPU implements Runnable {
                 (op_code == 0x38 && F.get_carry() == 1) ) {
                 int n = mmu.readByte(pc.read()+1);
                 if (n > 128) {
-                    n = (-256) | (n);
+                    n = getSignedInt(n);
                 }
                 pc.set(pc.read() + n);
             }
@@ -1078,7 +1135,7 @@ public class CPU implements Runnable {
 
 
     public static void main (String[] args) {
-        MMU mmu = new MMU("/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/09-op r,r.gb");
+        MMU mmu = new MMU("/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/07-jr,jp,call,ret,rst.gb");
         CPU cpu = new CPU(mmu);
         mmu.writeByte(0xFF44, 0x90);
         cpu.run();
