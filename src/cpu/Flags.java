@@ -14,11 +14,11 @@ public class Flags extends Register {
     }
 
     public int getHalfCarry() {
-        return super.value >> 4;
+        return (super.value >> 5) & 0x01;
     }
 
     public int getCarry() {
-        return (super.value >> 4) & 0xF1;
+        return (super.value >> 4) & 0x01;
     }
 
     public void setZero(int val) {

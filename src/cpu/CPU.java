@@ -1,7 +1,6 @@
 package cpu;
 
 import memory.MMU;
-import static java.lang.Math.abs;
 
 public class CPU implements Runnable {
 
@@ -113,11 +112,11 @@ public class CPU implements Runnable {
     private void addInd(Register dst, RegisterPair src, int carry){
         int read = mmu.readByte(src.read());
         int val = dst.read() + read + carry;
-        F.setZero((val == 0) ? 0 : 1);
+        F.setZero(((val & 0xFF) == 0) ? 1 : 0);
         F.setOperation(0);
-        F.setCarry((val > 255) ? 1 : 0);
-        F.setHalfCarry(halfCarryAdd8(dst.read(), read));
-        dst.set(val & 255);
+        F.setCarry((val > 0xFF) ? 1 : 0);
+        F.setHalfCarry(halfCarryAdd8(dst.read(), read+carry) + halfCarryAdd8(read, carry));
+        dst.set(val & 0xFF);
     }
 
     private void sub(Register dst, Register src, int carry){
@@ -131,7 +130,8 @@ public class CPU implements Runnable {
         else if (src.read() == 0) F.setHalfCarry(halfCarrySub8(dst.read(), carry));
         else if (dst.read() == 0) F.setHalfCarry(1);
         else {
-            if (halfCarrySub8(dst.read()- src.read(), carry) == 1 || halfCarrySub8(dst.read() , src.read()) == 1) {
+            if (halfCarrySub8(dst.read()- src.read(), carry) == 1 ||
+                halfCarrySub8(dst.read() , src.read()) == 1) {
                 F.setHalfCarry(1);
             } else {
                 F.setHalfCarry(0);
@@ -149,23 +149,25 @@ public class CPU implements Runnable {
         else if (value == 0) F.setHalfCarry(halfCarrySub8(dst.read(), carry));
         else if (dst.read() == 0) F.setHalfCarry(1);
         else {
-            if (halfCarrySub8(dst.read()- value, carry) == 1 || halfCarrySub8(dst.read() , value) == 1) {
+            if (halfCarrySub8(dst.read()- value, carry) == 1 ||
+                halfCarrySub8(dst.read() , value) == 1) {
                 F.setHalfCarry(1);
             } else {
                 F.setHalfCarry(0);
             }
         }
-        dst.set(val & 255);
+        dst.set(val & 0xFF);
     }
 
     private void subInd(Register dst, RegisterPair src, int carry){
         int read = mmu.readByte(src.read());
         int val = dst.read() - read - carry;
-        F.setZero((val == 0) ? 0 : 1);
+        F.setZero(((val & 0xFF) == 0) ? 1 : 0);
         F.setOperation(1);
         F.setCarry((val < 0) ? 1 : 0);
-        F.setHalfCarry(halfCarrySub8(dst.read(), read));
-        dst.set(abs(val));
+        F.setHalfCarry(halfCarrySub8(dst.read() - read, carry) +
+                        halfCarrySub8(dst.read(), read));
+        dst.set(val & 0xFF);
     }
 
     private void load(Register dst, Register src) {
@@ -212,7 +214,7 @@ public class CPU implements Runnable {
         F.setHalfCarry(halfCarryAdd8(val, 1));
         val++;
         mmu.writeByte(dst.read(), val);
-        F.setZero(val == 0 ? 1 : 0);
+        F.setZero((val & 0xFF) == 0 ? 1 : 0);
     }
 
     private void decInd(RegisterPair dst) {
@@ -336,7 +338,7 @@ public class CPU implements Runnable {
         F.setZero((val == 0) ? 1 : 0);
         F.setOperation(1);
         F.setCarry((val < 0) ? 1 : 0);
-        F.setHalfCarry(halfCarrySub8(dst.read(), src.read()));
+        F.setHalfCarry(halfCarrySub8(dst.read(), mmu.readByte(src.read())));
     }
 
     private void rlc(Register dst) {
@@ -350,11 +352,13 @@ public class CPU implements Runnable {
     }
 
     private void rlc(RegisterPair dst) {
-        int value = Integer.rotateLeft(mmu.readByte(dst.read()), 1);
+        int value = mmu.readByte(dst.read());
         F.setCarry(value >> 7);
-        value |= value >> 7;
+        value = Integer.rotateLeft(value, 1);
+        value |= F.getCarry();
+        value &= 0xff;
         F.setZero(value == 0 ? 1 : 0);
-        dst.set(value);
+        mmu.writeByte(dst.read(), value);
     }
 
     private void rl(Register dst) {
@@ -368,12 +372,14 @@ public class CPU implements Runnable {
     }
 
     private void rl(RegisterPair dst) {
-        int value = Integer.rotateLeft(mmu.readByte(dst.read()), 1);
-        value |= F.getCarry();
+        int prev = F.getCarry();
+        int value = mmu.readByte(dst.read());
         F.setCarry(value >> 7);
-        value &= 0xffff;
+        value = Integer.rotateLeft(value, 1);
+        value |= prev;
+        value &= 0xff;
         F.setZero(value == 0 ? 1 : 0);
-        dst.set(value);
+        mmu.writeByte(dst.read(), value);
     }
 
     private void sla(Register dst) {
@@ -386,12 +392,13 @@ public class CPU implements Runnable {
     }
 
     private void sla(RegisterPair dst) {
-        int value = mmu.readByte(dst.read()) << 1;
+        int value = mmu.readByte(dst.read());
         F.setCarry(value >> 7);
+        value = value << 1;
         value &= 0xFE;
         value &= 0xff;
         F.setZero(value == 0 ? 1 : 0);
-        dst.set(value);
+        mmu.writeByte(dst.read(), value);
     }
 
     private void swap(Register dst) {
@@ -407,7 +414,7 @@ public class CPU implements Runnable {
     private void swap(RegisterPair dst) {
         int r = mmu.readByte(dst.read());
         int value = ((r << 4) | (r >> 4)) & 0xFF;
-        mmu.writeByte(HL.read(), value);
+        mmu.writeByte(dst.read(), value);
         F.setZero(value == 0 ? 1 : 0);
         F.setOperation(0);
         F.setHalfCarry(0);
@@ -424,12 +431,13 @@ public class CPU implements Runnable {
     }
 
     private void rrc(RegisterPair dst) {
-        int value = Integer.rotateRight(mmu.readByte(dst.read()), 1);
+        int value = mmu.readByte(dst.read());
         F.setCarry(value & 0x01);
-        value &= value << 7;
+        value = Integer.rotateRight(value, 1);
+        value |= F.getCarry() << 7;
         value &= 0xff;
         F.setZero(value == 0 ? 1 : 0);
-        dst.set(value);
+        mmu.writeByte(dst.read(), value);
     }
 
     private void rr(Register dst) {
@@ -444,11 +452,16 @@ public class CPU implements Runnable {
     }
 
     private void rr(RegisterPair dst) {
-        int value = Integer.rotateRight(mmu.readByte(dst.read()), 1);
-        value |= F.getCarry() << 7;
+        int value = mmu.readByte(dst.read());
+        int prev = F.getCarry();
         F.setCarry(value & 0x01);
-
-        dst.set(value);
+        value = Integer.rotateRight(value, 1);
+        value &= 0xFF;
+        value |= (prev << 7);
+        F.setZero((value == 0) ? 1 : 0);
+        F.setOperation(0);
+        F.setHalfCarry(0);
+        mmu.writeByte(dst.read(), value);
     }
 
     private void srl(Register dst) {
@@ -462,10 +475,14 @@ public class CPU implements Runnable {
     }
 
     private void srl(RegisterPair dst) {
-        int value = mmu.readByte(dst.read()) >> 1;
+        int value = mmu.readByte(dst.read());
         F.setCarry(value & 0x01);
+        value = value >> 1;
         value &= 0x7F;
-        dst.set(value);
+        F.setZero(value == 0 ? 1 : 0);
+        F.setOperation(0);
+        F.setHalfCarry(0);
+        mmu.writeByte(dst.read(), value);
     }
 
     private void sra(Register dst) {
@@ -478,11 +495,13 @@ public class CPU implements Runnable {
     }
 
     private void sra(RegisterPair dst) {
-        int value = mmu.readByte(dst.read()) >> 1;
-        int prev = dst.read() & 0x80;
+        int value = mmu.readByte(dst.read());
         F.setCarry(value & 0x01);
+        int prev = value & 0x80;
+        value = value >> 1;
         value |= prev;
-        dst.set(value);
+        F.setZero(((value & 0xFF) == 0 ? 1 : 0));
+        mmu.writeByte(dst.read(), value);
     }
 
     private void bit(Register reg, int n) {
@@ -502,7 +521,7 @@ public class CPU implements Runnable {
     }
 
     private void set(RegisterPair reg, int n) {
-        reg.set(mmu.readByte(reg.read()) | (0x01 << n));
+        mmu.writeByte(reg.read(), mmu.readByte(reg.read()) | (0x01 << n));
     }
 
     private void res(Register reg, int n) {
@@ -510,7 +529,7 @@ public class CPU implements Runnable {
     }
 
     private void res(RegisterPair reg, int n) {
-        reg.set(mmu.readByte(reg.read()) & ~(0x1 << n));
+        mmu.writeByte(reg.read(), mmu.readByte(reg.read()) & ~(0x1 << n));
     }
 
     private Register getRegister(int reg) {
@@ -673,7 +692,7 @@ public class CPU implements Runnable {
             }
         } else if (opCode == 0xFA) {
             int nn = mmu.readWord(pc.read()+1);
-            int val = mmu.readByte(nn);
+            int val = mmu.readByte(nn) & 0xFF;
             loadImm8(A, val);
             pc.increment();
             pc.increment();
@@ -848,10 +867,8 @@ public class CPU implements Runnable {
                 if (d1 == 0x0) inc(B);
                 else if (d1 == 0x1) inc(D);
                 else if (d1 == 0x2) inc(H);
-                else if (d1 == 0x3) inc(HL);
+                else if (d1 == 0x3) incInd(HL);
             }
-        } else if (opCode == 0x34) {
-            incInd(HL);
         } else if (d1 < 0x04 && (d0 == 0x06 || d0 == 0x0E)) {
             // LD REG, n
             int n = mmu.readByte(pc.read()+1);
@@ -1030,6 +1047,19 @@ public class CPU implements Runnable {
             F.setZero(0);
         } else if (opCode == 0x27) {
             // daa
+            if (F.getOperation() == 0) {
+                int a = A.read();
+                if (F.getCarry() == 1 || a > 0x99) {
+                    A.set((A.read() + 0x60) & 0xFF);
+                    F.setCarry(1);
+                }
+                if (F.getHalfCarry() == 1 || (a & 0x0f) > 0x09) A.set((A.read() + 0x06) & 0xFF);
+            } else {
+                if (F.getCarry() == 1) A.set((A.read()-0x60) & 0xFF);
+                if (F.getHalfCarry() == 1)  A.set((A.read()-0x06) & 0xFF);
+            }
+            F.setZero(A.read() == 0 ? 1 : 0);
+            F.setHalfCarry(0);
         } else if (opCode == 0x37) {
             // scf
             F.setCarry(1);

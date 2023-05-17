@@ -8,9 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/CPU.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpu/Flags.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/Flags.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpu/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/Register.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory/MMU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/CPUTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/CPUTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +59,7 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.CPU">
+  <component name="RunManager" selected="JUnit.CPUTest">
     <configuration name="CPU" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <output_file path="output.txt" is_save="true" />
       <option name="MAIN_CLASS_NAME" value="cpu.CPU" />
@@ -142,9 +139,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.CPU" />
         <item itemvalue="JUnit.CPUTest" />
         <item itemvalue="JUnit.CPUTest.op_sp_hl" />
+        <item itemvalue="Application.CPU" />
         <item itemvalue="JUnit.CPUTest.op_r_imm" />
         <item itemvalue="JUnit.CPUTest.bit_ops" />
       </list>
@@ -292,7 +289,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684274866389</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="going to change from underscore format to camel case to follow java conv.">
+      <created>1684277127756</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1684277127757</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="UnknownFeatures">
