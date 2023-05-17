@@ -194,8 +194,16 @@ public class CPU implements Runnable {
         mmu.writeByte(location, src.read());
     }
 
+    private void loadDstInd(Register dst, Register src) {
+        mmu.writeByte(dst.read() + 0xFF00, src.read());
+    }
+
     private void loadSrcInd(Register dst, RegisterPair src) {
         dst.set(mmu.readByte(src.read()));
+    }
+
+    private void loadSrcInd(Register dst, Register src) {
+        dst.set(mmu.readByte(src.read()+0xFF00));
     }
 
     private void inc(Register dst) {
@@ -621,7 +629,11 @@ public class CPU implements Runnable {
         int d0 = opCode & 0x0F;
         if (opCode == 0x10) stop = true;
         else if (opCode == 0x76) halt = true;
-        else if (opCode == 0x3A) {
+        else if (opCode == 0xE2) {
+            loadDstInd(C, A);
+        } else if (opCode == 0xF2) {
+            loadSrcInd(A, C);
+        } else if (opCode == 0x3A) {
             loadSrcInd(A, HL);
             HL.decrement();
         } else if (opCode == 0xF8) {
@@ -928,7 +940,7 @@ public class CPU implements Runnable {
                 pop(H);
             } else {
                 // flag pop
-                F.set(mmu.readByte(sp.read()));
+                F.set(mmu.readByte(sp.read()) & 0xF0);
                 sp.increment();
                 A.set(mmu.readByte(sp.read()));
                 sp.increment();
@@ -1210,7 +1222,7 @@ public class CPU implements Runnable {
 
 
     public static void main (String[] args) {
-        MMU mmu = new MMU("/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/11-op a,(hl).gb");
+        MMU mmu = new MMU("/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/01-special.gb");
         CPU cpu = new CPU(mmu);
         mmu.writeByte(0xFF44, 0x90);
         cpu.run();

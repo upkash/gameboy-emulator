@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="going to change from underscore format to camel case to follow java conv.">
+    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Implemented DAA">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/CPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpu/Flags.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/Flags.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory/MMU.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,8 +140,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.CPUTest" />
-        <item itemvalue="JUnit.CPUTest.op_sp_hl" />
         <item itemvalue="Application.CPU" />
+        <item itemvalue="JUnit.CPUTest.op_sp_hl" />
         <item itemvalue="JUnit.CPUTest.op_r_imm" />
         <item itemvalue="JUnit.CPUTest.bit_ops" />
       </list>
@@ -296,7 +296,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684277127757</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Implemented DAA">
+      <created>1684296359878</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1684296359878</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -311,7 +318,8 @@
     <MESSAGE value="Passing a few tests, fixing some MMU stuff" />
     <MESSAGE value="Added unit tests, going to try to pass all tests now" />
     <MESSAGE value="going to change from underscore format to camel case to follow java conv." />
-    <option name="LAST_COMMIT_MESSAGE" value="going to change from underscore format to camel case to follow java conv." />
+    <MESSAGE value="Implemented DAA" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented DAA" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

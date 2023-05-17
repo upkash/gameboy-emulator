@@ -105,12 +105,10 @@ public class MMU  {
             case 0x8000:
 //                tileSet.setTileVal(address, value);
             case 0x9000:
-//                System.out.print.ln(Integer.toHexString(address & 0x1FFF));
                 vram[address & 0x1FFF] = value;
 //                if (address >= 0x9800 && address <= 0x9FFF) {
 //                    tileMaps.updateTileMap(address, value);
 //                }
-//                System.out.println("writing to " + Integer.toHexString(address));
                 break;
             case 0xA000:
             case 0xB000:
