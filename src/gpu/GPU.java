@@ -51,7 +51,7 @@ public class GPU implements Runnable {
 
     @Override
     public void run() {
-        JFrame frame = new JFrame("Gameboy Screen");
+        JFrame frame = new JFrame("main.Gameboy Screen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(sc);
         frame.pack();

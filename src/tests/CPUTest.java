@@ -1,28 +1,25 @@
 package tests;
-import cpu.CPU;
-import memory.MMU;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
+import main.GameBoy;
 public class CPUTest {
 
     public boolean blarggTest(String rom) {
         String baseDir = "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/";
-        MMU mmu = new MMU(baseDir + rom);
-        CPU cpu = new CPU(mmu);
-        Thread t = new Thread(cpu);
+        GameBoy gb = new GameBoy(baseDir + rom);
+        Thread t = new Thread(gb);
         t.start();
-        while (!cpu.testOutput.contains("Passed") && !cpu.testOutput.contains("Failed")) {
-            System.out.println(cpu.testOutput);
+        while (!gb.cpu.testOutput.contains("Passed") && !gb.cpu.testOutput.contains("Failed")) {
+            System.out.println(gb.cpu.testOutput);
         }
-        cpu.stop = true;
+        gb.cpu.stop = true;
         try {
             t.join();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(cpu.testOutput);
-        return cpu.testOutput.contains("Passed");
+        System.out.println(gb.cpu.testOutput);
+        return gb.cpu.testOutput.contains("Passed");
     }
 
     @Test

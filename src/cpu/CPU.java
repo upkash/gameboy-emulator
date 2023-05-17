@@ -2,7 +2,7 @@ package cpu;
 
 import memory.MMU;
 
-public class CPU implements Runnable {
+public class CPU {
 
     // GP registers, stack pointers, prog. counter, register pairings
     private final Register A;
@@ -17,10 +17,11 @@ public class CPU implements Runnable {
     private final RegisterPair BC;
     private final RegisterPair DE;
     private final RegisterPair HL;
+    private boolean interruptsEnabled;
     public String testOutput = "";
 
-    public static final int[] op_cycles = {
-            // 1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
+    public static final int[] opCycles = {
+//          0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
             1, 3, 2, 2, 1, 1, 2, 1, 5, 2, 2, 2, 1, 1, 2, 1, // 0
             0, 3, 2, 2, 1, 1, 2, 1, 3, 2, 2, 2, 1, 1, 2, 1, // 1
             2, 3, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 1, 1, 2, 1, // 2
@@ -37,6 +38,44 @@ public class CPU implements Runnable {
             2, 3, 3, 0, 3, 4, 2, 4, 2, 4, 3, 0, 3, 0, 2, 4, // D
             3, 3, 2, 0, 0, 4, 2, 4, 4, 1, 4, 0, 0, 0, 2, 4, // E
             3, 3, 2, 1, 0, 4, 2, 4, 3, 2, 4, 1, 0, 0, 2, 4, // F
+    };
+
+    private static final int[] opCycleBranched = {
+            1, 3, 2, 2, 1, 1, 2, 1, 5, 2, 2, 2, 1, 1, 2, 1,
+            1, 3, 2, 2, 1, 1, 2, 1, 3, 2, 2, 2, 1, 1, 2, 1,
+            3, 3, 2, 2, 1, 1, 2, 1, 3, 2, 2, 2, 1, 1, 2, 1,
+            3, 3, 2, 2, 3, 3, 3, 1, 3, 2, 2, 2, 1, 1, 2, 1,
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+            2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1,
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+            1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1,
+            5, 3, 4, 4, 6, 4, 2, 4, 5, 4, 4, 0, 6, 6, 2, 4,
+            5, 3, 4, 0, 6, 4, 2, 4, 5, 4, 4, 0, 6, 0, 2, 4,
+            3, 3, 2, 0, 0, 4, 2, 4, 4, 1, 4, 0, 0, 0, 2, 4,
+            3, 3, 2, 1, 0, 4, 2, 4, 3, 2, 4, 1, 0, 0, 2, 4
+    };
+
+    private static final int[] opCyclesCB = {
+            2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+            2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+            2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+            2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+            2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+            2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+            2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+            2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2,
+            2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+            2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+            2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+            2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+            2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+            2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+            2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2,
+            2, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 4, 2
     };
 
     // flags
@@ -64,7 +103,9 @@ public class CPU implements Runnable {
         HL = new RegisterPair(H, L);
         stop = false;
         halt = false;
+        interruptsEnabled = false;
         this.mmu = mmu;
+        mmu.writeByte(0xFF44, 0x90);
     }
     private void add(Register dst, Register src, int carry){
         int val = dst.read() + src.read() + carry;
@@ -607,7 +648,7 @@ public class CPU implements Runnable {
         return (-256) | (n);
     }
 
-    private void executeOpCode(int opCode) {
+    private int executeOpCode(int opCode) {
         // 0x [d1][d0]
         String out =    "A:" + String.format("%02X", A.read()) +
                         " F:" + String.format("%02X", F.read()) +
@@ -625,9 +666,13 @@ public class CPU implements Runnable {
                             String.format("%02X", mmu.readByte(pc.read()+2))+ "," +
                             String.format("%02X", mmu.readByte(pc.read()+3));
         System.out.println(out);
+
+        boolean branchTaken = false;
         int d1 = opCode >> 4;
         int d0 = opCode & 0x0F;
         if (opCode == 0x10) stop = true;
+        else if (opCode == 0xFB) interruptsEnabled = true;
+        else if (opCode == 0xF3) interruptsEnabled = false;
         else if (opCode == 0x76) halt = true;
         else if (opCode == 0xE2) {
             loadDstInd(C, A);
@@ -663,7 +708,7 @@ public class CPU implements Runnable {
             sp.set(HL.read());
         } else if (opCode == 0xCB) {
             pc.increment();
-            executeCB(mmu.readByte(pc.read()));
+            return executeCB(mmu.readByte(pc.read()));
         } else if (opCode == 0x22) {
             loadDstInd(HL, A);
             HL.increment();
@@ -802,16 +847,28 @@ public class CPU implements Runnable {
             else cp(A,dst);
         } else if (opCode == 0xC0) {
             // RET NZ
-            if (F.getZero() == 0) pop();
+            if (F.getZero() == 0) {
+                pop();
+                branchTaken = true;
+            }
         } else if (opCode == 0xC8) {
             // RET Z
-            if (F.getZero() != 0) pop();
+            if (F.getZero() != 0) {
+                pop();
+                branchTaken = true;
+            }
         } else if (opCode == 0xD0) {
             // RET NC
-            if (F.getCarry() == 0) pop();
+            if (F.getCarry() == 0) {
+                pop();
+                branchTaken = true;
+            }
         } else if (opCode == 0xD8) {
             // RET C
-            if (F.getCarry() != 0) pop();
+            if (F.getCarry() != 0) {
+                pop();
+                branchTaken = true;
+            }
         } else if (opCode == 0xC9) {
             // RET
            pop();
@@ -948,12 +1005,16 @@ public class CPU implements Runnable {
         } else if ((d1 >= 0x0C && d1 < 0x0E) && (d0 == 0x02 || d0 == 0x0A)) {
             // JP flag nn
             pc.increment();
+            branchTaken = true;
             int nn = mmu.readWord(pc.read());
             if (opCode == 0xC2 && F.getZero() == 0) pc.set(nn-1);
             else if (opCode == 0xCA && F.getZero() == 1) pc.set(nn-1);
             else if (opCode == 0xD2 && F.getCarry() == 0) pc.set(nn-1);
             else if (opCode == 0xDA && F.getCarry() == 1) pc.set(nn-1);
-            else pc.increment();
+            else {
+                pc.increment();
+                branchTaken = false;
+            }
         } else if (opCode == 0xC3) {
             // JP nn
             int nn = mmu.readWord(pc.read()+1);
@@ -967,6 +1028,7 @@ public class CPU implements Runnable {
                 int nn = mmu.readWord(pc.read()+1);
                 push(pc.read()+3);
                 pc.set(nn-1);
+                branchTaken = true;
             } else {
                 pc.increment();
                 pc.increment();
@@ -1016,6 +1078,7 @@ public class CPU implements Runnable {
                     n = getSignedInt(n);
                 }
                 pc.set(pc.read() + n);
+                branchTaken = true;
             }
             pc.increment();
         } else if (opCode == 0x2A) {
@@ -1082,9 +1145,10 @@ public class CPU implements Runnable {
             F.setOperation(0);
             F.setHalfCarry(0);
         }
+        return branchTaken ? opCycleBranched[opCode] : opCycles[opCode];
     }
 
-    private void executeCB(int arg) {
+    private int executeCB(int arg) {
         int d1 = arg >> 4;
         int d0 = arg & 0x0F;
         Register reg = getRegister(d0 & 0x07);
@@ -1206,29 +1270,56 @@ public class CPU implements Runnable {
                 set(reg, b);
             }
         }
+        return opCyclesCB[arg];
     }
 
-    @Override
-    public void run() {
-        while (!stop) {
-            int currInstr = mmu.readByte(pc.read());
-            executeOpCode(currInstr);
-            pc.increment();
-            if (mmu.readByte(0xff02) == 0x81) {
-                testOutput += (char)mmu.readByte(0xff01);
-//                System.out.println(testOutput);
-                mmu.writeByte(0xff02, 0x00);
-            }
+    private boolean handleInterrupt(int bit, int interruptVector, int fired) {
+        if (((fired >> bit) & 0x01) == 0) return false;
+
+        mmu.setIFBitZero(bit);
+        pc.set(interruptVector);
+        interruptsEnabled = false;
+        return true;
+    }
+
+    private void handleInterrupts() {
+        if (interruptsEnabled) {
+            int interrupt = mmu.getIF() & mmu.getIE();
+//            System.out.println(Integer.toBinaryString(interrupt));
+            if (interrupt == 0) return;
+            push(pc.read());
+
+            boolean handled;
+
+            handled = handleInterrupt(0, 0x40, interrupt);
+            if (handled) return;
+
+            handled = handleInterrupt(1, 0x48, interrupt);
+            if (handled) return;
+
+            handled = handleInterrupt(2, 0x50, interrupt);
+            if (handled) return;
+
+            handled = handleInterrupt(3, 0x58, interrupt);
+            if (handled) return;
+
+            handleInterrupt(4, 0x60, interrupt);
+
         }
     }
 
-
-
-
-    public static void main (String[] args) {
-        MMU mmu = new MMU("/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/02-interrupts.gb");
-        CPU cpu = new CPU(mmu);
-        mmu.writeByte(0xFF44, 0x90);
-        cpu.run();
+    public int tick() {
+        if (halt) return 1;
+        int currInstr = mmu.readByte(pc.read());
+        int cycles = executeOpCode(currInstr);
+        pc.increment();
+        if (mmu.readByte(0xff02) == 0x81) {
+            testOutput += (char)mmu.readByte(0xff01);
+//                System.out.println(testOutput);
+            mmu.writeByte(0xff02, 0x00);
+        }
+        handleInterrupts();
+        return cycles;
     }
+
 }

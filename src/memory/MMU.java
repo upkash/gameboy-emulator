@@ -7,7 +7,7 @@ import java.io.*;
 
 
 /**
- *  Memory Management Unit for the Gameboy Classic;
+ *  Memory Management Unit for the main.Gameboy Classic;
  *  Maps addresses to byte arrays;
  *  Read and write values to memory;
  *  Stores tile information for graphics;
@@ -175,6 +175,38 @@ public class MMU  {
 
         }
         return 0;
+    }
+
+    public int getIF() {
+        return readByte(0xFF0F);
+    }
+
+    public int getIE() {
+        return readByte(0xFFFF);
+    }
+
+    public void setIFBitZero(int bit) {
+        int iF = getIF();
+        iF = iF & ~(1 << bit);
+        writeByte(0xFF0F, iF);
+    }
+
+    public void setIEBitZero(int bit) {
+        int iE = getIE();
+        iE = iE & ~(1 << bit);
+        writeByte(0xFFFF, iE);
+    }
+
+    public void setIFBitOne(int bit) {
+        int iF = getIF();
+        iF = iF | (1 << bit);
+        writeByte(0xFF0F, iF);
+    }
+
+    public void setIEBitOne(int bit) {
+        int iE = getIE();
+        iE = iE | (1 << bit);
+        writeByte(0xFFFF, iE);
     }
 
     public Tile getTile(int address) {
