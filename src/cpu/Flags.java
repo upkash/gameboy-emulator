@@ -6,11 +6,11 @@ public class Flags extends Register {
     }
 
     public int getZero() {
-        return super.value >> 7;
+        return (super.value >> 7) & 0x01;
     }
 
     public int getOperation() {
-        return super.value >> 6;
+        return (super.value >> 6) & 0x01;
     }
 
     public int getHalfCarry() {

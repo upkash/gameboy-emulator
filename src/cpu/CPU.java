@@ -1059,13 +1059,17 @@ public class CPU implements Runnable {
             F.setZero(0);
         } else if (opCode == 0x27) {
             // daa
+//            System.out.println(F.getOperation());
             if (F.getOperation() == 0) {
                 int a = A.read();
+//                System.out.println(Integer.toHexString(a & 0x0F));
                 if (F.getCarry() == 1 || a > 0x99) {
                     A.set((A.read() + 0x60) & 0xFF);
                     F.setCarry(1);
                 }
-                if (F.getHalfCarry() == 1 || (a & 0x0f) > 0x09) A.set((A.read() + 0x06) & 0xFF);
+                if (F.getHalfCarry() == 1 || (a & 0x0f) > 0x09) {
+                    A.set((A.read() + 0x06) & 0xFF);
+                }
             } else {
                 if (F.getCarry() == 1) A.set((A.read()-0x60) & 0xFF);
                 if (F.getHalfCarry() == 1)  A.set((A.read()-0x06) & 0xFF);
@@ -1222,7 +1226,7 @@ public class CPU implements Runnable {
 
 
     public static void main (String[] args) {
-        MMU mmu = new MMU("/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/01-special.gb");
+        MMU mmu = new MMU("/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/02-interrupts.gb");
         CPU cpu = new CPU(mmu);
         mmu.writeByte(0xFF44, 0x90);
         cpu.run();

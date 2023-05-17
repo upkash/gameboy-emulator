@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Implemented DAA">
+    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Fixed pop af">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/CPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory/MMU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpu/Flags.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/Flags.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +59,7 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.CPUTest">
+  <component name="RunManager" selected="Application.CPU">
     <configuration name="CPU" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <output_file path="output.txt" is_save="true" />
       <option name="MAIN_CLASS_NAME" value="cpu.CPU" />
@@ -139,8 +139,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.CPUTest" />
         <item itemvalue="Application.CPU" />
+        <item itemvalue="JUnit.CPUTest" />
         <item itemvalue="JUnit.CPUTest.op_sp_hl" />
         <item itemvalue="JUnit.CPUTest.op_r_imm" />
         <item itemvalue="JUnit.CPUTest.bit_ops" />
@@ -303,7 +303,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684296359878</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Fixed pop af">
+      <created>1684300380699</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1684300380699</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -319,7 +326,8 @@
     <MESSAGE value="Added unit tests, going to try to pass all tests now" />
     <MESSAGE value="going to change from underscore format to camel case to follow java conv." />
     <MESSAGE value="Implemented DAA" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented DAA" />
+    <MESSAGE value="Fixed pop af" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed pop af" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
