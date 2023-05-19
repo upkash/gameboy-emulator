@@ -7,13 +7,7 @@ import java.awt.image.BufferedImage;
 public class Screen extends JPanel {
     private final BufferedImage buffer;
     private final BufferedImage img;
-    private JFrame frame;
-    private final Color[] palette = {
-            new Color(224, 248, 208),
-            new Color(136, 192, 112),
-            new Color(52,104,86),
-            new Color(8, 24, 32)
-    };
+    private final JFrame frame;
 
     public Screen() {
         frame = new JFrame("gb");

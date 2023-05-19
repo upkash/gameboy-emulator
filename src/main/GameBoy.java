@@ -1,7 +1,6 @@
 package main;
 import cpu.CPU;
 import ppu.PPU;
-import ppu.Screen;
 import memory.MMU;
 
 public class GameBoy implements Runnable {
