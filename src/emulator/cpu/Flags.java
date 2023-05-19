@@ -1,4 +1,4 @@
-package cpu;
+package emulator.cpu;
 
 public class Flags extends Register {
     public Flags(int value) {

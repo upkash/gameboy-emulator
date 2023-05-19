@@ -1,4 +1,4 @@
-package ppu;
+package emulator.ppu;
 
 public enum PPUMode {
     ACCESS_VRAM,

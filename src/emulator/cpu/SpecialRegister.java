@@ -1,4 +1,4 @@
-package cpu;
+package emulator.cpu;
 
 public class SpecialRegister extends Register{
     public SpecialRegister(int value) {

@@ -1,6 +1,6 @@
-package cpu;
+package emulator.cpu;
 
-import memory.MMU;
+import emulator.memory.MMU;
 
 public class CPU {
 
@@ -81,7 +81,7 @@ public class CPU {
     // flags
     private final Flags F;
 
-    // memory
+    // emulator.memory.memory
     private final MMU mmu;
 
     public boolean stop;

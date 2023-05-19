@@ -1,42 +1,12 @@
-package ppu;
+package emulator.ppu;
 
-import memory.MMU;
-import java.awt.*;
+import emulator.memory.MMU;
 
-public class PPU  {
-    private static final int CLOCKS_PER_HBLANK = 204; /* Mode 0 */
-    private static final int CLOCKS_PER_SCANLINE_OAM = 80; /* Mode 2 */
-    private static final int CLOCKS_PER_SCANLINE_VRAM = 172; /* Mode 3 */
-    private static final int CLOCKS_PER_SCANLINE =
-                (CLOCKS_PER_SCANLINE_OAM + CLOCKS_PER_SCANLINE_VRAM + CLOCKS_PER_HBLANK);
-
-    private static final int CLOCKS_PER_VBLANK = 4560; /* Mode 1 */
-    private static final int SCANLINES_PER_FRAME = 144;
-    private static final int CLOCKS_PER_FRAME = (CLOCKS_PER_SCANLINE * SCANLINES_PER_FRAME) + CLOCKS_PER_VBLANK;
-
-    private static final int TILE_SET_ZERO_ADDR = 0x8000;
-    private static final int TILE_SET_ONE_ADDR = 0x8800;
-    private static final int TILE_MAP_ZERO_ADDR = 0x9800;
-    private static final int TILE_MAP_ONE_ADDR = 0x9C00;
-
-
-    private final MMU mmu;
-    private final Screen sc;
-    private int scanLine;
-    private PPUMode mode = PPUMode.ACCESS_OAM;
-    private int cycleCounter;
-
-    private final Color[] palette = {
-            new Color(224, 248, 208),
-            new Color(136, 192, 112),
-            new Color(52,104,86),
-            new Color(8, 24, 32)
-    };
-
-
-    public PPU(MMU mmu) {
-        this.mmu = mmu;
-        sc = new Screen();
+public class PPUHeadless extends PPU {
+    private final int[][] pixels;
+    public PPUHeadless(MMU mmu) {
+        super(mmu);
+        pixels = new int[144][160];
     }
 
     public void tick(int cycles) {
@@ -72,7 +42,8 @@ public class PPU  {
                     cycleCounter %= CLOCKS_PER_SCANLINE;
 
                     if (scanLine == 154) {
-                        sc.renderFrame();
+//                        sc.renderFrame();
+                        printFrame();
                         scanLine = 0;
                         mmu.setLY(scanLine);
                         mode = PPUMode.ACCESS_OAM;
@@ -118,18 +89,8 @@ public class PPU  {
 
     }
 
-    private void writeScanline(int line) {
-        if (!mmu.displayEnabled()) { return; }
-        if (mmu.bgEnabled()) {
-            drawBgLine(line);
-        }
-
-        if (mmu.windowEnabled()) {
-            drawWindowLine(line);
-        }
-    }
-
-    private void drawBgLine(int line) {
+    @Override
+    protected void drawBgLine(int line) {
         boolean useTileSetZero = mmu.bgWindowTileData();
         boolean useTileMapZero = !mmu.bgTileMapDisplay();
 
@@ -140,7 +101,7 @@ public class PPU  {
             /* Work out the position of the pixel in the framebuffer */
 //            System.out.println("scroll");
             int scrolledX = screenX + mmu.getScrollY();
-            int scrolledY = line +  mmu.getScrollX();
+            int scrolledY = line + mmu.getScrollX();
 
             /* Work out the index of the pixel in the full background map */
             int bgMapX = scrolledX % 256;
@@ -165,7 +126,7 @@ public class PPU  {
 //            System.out.println("TILE ID " + Integer.toHexString(tileId));
 
 
-            /* Calculate the offset from the start of the tile data memory where
+            /* Calculate the offset from the start of the tile data emulator.memory.memory where
              * the data for our tile lives */
             int tileDataMemOffset = useTileSetZero
                     ? tileId * 16
@@ -187,21 +148,25 @@ public class PPU  {
             int pixels2 = mmu.readByte(tileLineDataStartAddr + 1);
 
             int color = getColorFromPixel(pixels1, pixels2, tilePixelX);
-//            pixels[line][screenX] = color;
-            sc.set(screenX, line, palette[color].getRGB());
+            pixels[line][screenX] = color;
+//            sc.set(screenX, line, palette[color].getRGB());
 
         }
+    }
 
+    @Override
+    protected void drawWindowLine(int line) {
 
     }
 
-    private void drawWindowLine(int line) {
+    private void printFrame() {
+        System.out.println("NEW FRAME");
+        String out = "";
+        for (int y = 0; y < 144; y ++) {
+            for (int x = 0; x < 160; x++) out = out.concat(pixels[y][x] + " ");
+            out = out.concat("\n");
+        }
 
+        System.out.println(out);
     }
-
-    private int getColorFromPixel(int byte1, int byte2, int pixelIndex) {
-//        System.out.println("WRITING COLOR " + ((byte2 >> 7-pixelIndex << 1 | byte1 >> 7-pixelIndex) & 0xFF));
-        return (byte2 >> 7-pixelIndex << 1 | byte1 >> 7-pixelIndex) & 0x03;
-    }
-
 }

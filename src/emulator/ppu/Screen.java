@@ -1,4 +1,4 @@
-package ppu;
+package emulator.ppu;
 
 import javax.swing.*;
 import java.awt.*;

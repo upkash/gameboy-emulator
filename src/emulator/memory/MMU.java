@@ -1,12 +1,12 @@
-package memory;
+package emulator.memory;
 
 import java.io.*;
 
 
 /**
- *  Memory Management Unit for the main.Gameboy Classic;
+ *  Memory Management Unit for the emulator.main.Gameboy Classic;
  *  Maps addresses to byte arrays;
- *  Read and write values to memory;
+ *  Read and write values to emulator.memory.memory;
  *  Stores tile information for graphics;
  */
 public class MMU  {
@@ -14,7 +14,7 @@ public class MMU  {
     private static final int RAM_BANK_SIZE = 0x2000;
     int[] boot = new int[0x100];
     private static final int[] boot_loader = {
-            // prod memory
+            // prod emulator.memory.memory
             0x31, 0xFE, 0xFF, // LD SP,$FFFE
 
             // enable LCD

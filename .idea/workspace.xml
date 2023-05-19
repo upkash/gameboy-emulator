@@ -4,13 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="rescaled frame">
-      <change afterPath="$PROJECT_DIR$/src/cpu_instrs/individual/Tetris.gb" afterDir="false" />
+    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="fixed scrolling">
+      <change afterPath="$PROJECT_DIR$/src/emulator/cpu_instrs/individual/Tetris.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/emulator/ppu/PPUHead.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/emulator/ppu/PPUHeadless.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/GameBoy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/GameBoy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory/MMU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ppu/PPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/PPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ppu/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/Screen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameboy-doctor/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/gameboy-doctor/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameboy-doctor/gameboy-doctor" beforeDir="false" afterPath="$PROJECT_DIR$/gameboy-doctor/gameboy-doctor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/cpu/CPU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpu/Flags.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/cpu/Flags.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpu/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/cpu/Register.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpu/RegisterPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/cpu/RegisterPair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpu/SpecialRegister.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/cpu/SpecialRegister.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/GameBoy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/main/GameBoy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/memory/MMU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ppu/PPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/ppu/PPU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ppu/PPUMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/ppu/PPUMode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ppu/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/ppu/Screen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/CPUTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/tests/CPUTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +31,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -72,11 +83,11 @@
   <component name="RunManager" selected="Application.GameBoy">
     <configuration name="CPU" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <output_file path="output.txt" is_save="true" />
-      <option name="MAIN_CLASS_NAME" value="cpu.CPU" />
+      <option name="MAIN_CLASS_NAME" value="emulator.cpu.CPU" />
       <module name="GameBoyEmulator" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="cpu.*" />
+          <option name="PATTERN" value="emulator.cpu.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -86,11 +97,11 @@
     </configuration>
     <configuration name="GameBoy" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <output_file path="output.txt" is_save="true" />
-      <option name="MAIN_CLASS_NAME" value="main.GameBoy" />
+      <option name="MAIN_CLASS_NAME" value="emulator.main.GameBoy" />
       <module name="GameBoyEmulator" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="main.*" />
+          <option name="PATTERN" value="emulator.main.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -106,11 +117,11 @@
       </method>
     </configuration>
     <configuration name="Screen" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="ppu.Screen" />
+      <option name="MAIN_CLASS_NAME" value="emulator.ppu.Screen" />
       <module name="GameBoyEmulator" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ppu.*" />
+          <option name="PATTERN" value="emulator.ppu.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -122,12 +133,12 @@
       <module name="GameBoyEmulator" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="tests.*" />
+          <option name="PATTERN" value="emulator.tests.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="tests" />
-      <option name="MAIN_CLASS_NAME" value="tests.CPUTest" />
+      <option name="MAIN_CLASS_NAME" value="emulator.tests.CPUTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -334,7 +345,21 @@
       <option name="project" value="LOCAL" />
       <updated>1684468654239</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="fixed scrolling">
+      <created>1684474616958</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1684474616958</updated>
+    </task>
+    <task id="LOCAL-00028" summary="fixed scrolling">
+      <created>1684474687738</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1684474687738</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -366,7 +391,8 @@
     <MESSAGE value="Skipping the interrupts to work on ppu" />
     <MESSAGE value="partially working screen, too small, and text from test is on top of screen not bottom" />
     <MESSAGE value="rescaled frame" />
-    <option name="LAST_COMMIT_MESSAGE" value="rescaled frame" />
+    <MESSAGE value="fixed scrolling" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed scrolling" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

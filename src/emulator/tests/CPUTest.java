@@ -1,11 +1,11 @@
-package tests;
+package emulator.tests;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import main.GameBoy;
+import emulator.main.GameBoy;
 public class CPUTest {
 
     public boolean blarggTest(String rom) {
-        String baseDir = "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/";
+        String baseDir = "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/emulator.cpu_instrs/individual/";
         GameBoy gb = new GameBoy(baseDir + rom);
         Thread t = new Thread(gb);
         t.start();
