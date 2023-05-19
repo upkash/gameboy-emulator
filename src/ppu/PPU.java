@@ -22,17 +22,20 @@ public class PPU  {
 
     private final MMU mmu;
     private final Screen sc;
-    private int[][] pixels;
     private int scanLine;
-    private int scrollX;
-    private int scrollY;
     private PPUMode mode = PPUMode.ACCESS_OAM;
     private int cycleCounter;
+
+    private final Color[] palette = {
+            new Color(224, 248, 208),
+            new Color(136, 192, 112),
+            new Color(52,104,86),
+            new Color(8, 24, 32)
+    };
 
 
     public PPU(MMU mmu) {
         this.mmu = mmu;
-        pixels = new int[144][160];
         sc = new Screen();
     }
 
@@ -69,17 +72,13 @@ public class PPU  {
                     cycleCounter %= CLOCKS_PER_SCANLINE;
 
                     if (scanLine == 154) {
-//                        write_sprites();
-//                        draw();
-//                        System.out.println("RENDERING");
-                        sc.renderFrame(pixels);
-//                        buffer.reset();
+                        sc.renderFrame();
                         scanLine = 0;
                         mmu.setLY(scanLine);
                         mode = PPUMode.ACCESS_OAM;
                         mmu.setStatBit(1);
                         mmu.unSetStatBit(0);
-                    };
+                    }
                 }
                 break;
             case ACCESS_OAM: // OAM
@@ -132,15 +131,16 @@ public class PPU  {
 
     private void drawBgLine(int line) {
         boolean useTileSetZero = mmu.bgWindowTileData();
-        boolean useTileMapZero = mmu.bgTileMapDisplay();
+        boolean useTileMapZero = !mmu.bgTileMapDisplay();
 
-        int tileSetAddr = TILE_SET_ZERO_ADDR;
-        int tileMapAddr = TILE_MAP_ZERO_ADDR;
+        int tileSetAddr = useTileSetZero ? TILE_SET_ZERO_ADDR : TILE_SET_ONE_ADDR;
+        int tileMapAddr = useTileMapZero ? TILE_MAP_ZERO_ADDR : TILE_MAP_ONE_ADDR;
 
         for (int screenX = 0; screenX < 160; screenX++) {
             /* Work out the position of the pixel in the framebuffer */
-            int scrolledX = screenX + scrollX;
-            int scrolledY = line + scrollY;
+//            System.out.println("scroll");
+            int scrolledX = screenX + mmu.getScrollY();
+            int scrolledY = line +  mmu.getScrollX();
 
             /* Work out the index of the pixel in the full background map */
             int bgMapX = scrolledX % 256;
@@ -185,13 +185,11 @@ public class PPU  {
              * for a more performant renderer */
             int pixels1 = mmu.readByte(tileLineDataStartAddr);
             int pixels2 = mmu.readByte(tileLineDataStartAddr + 1);
-//            System.out.println(Integer.toHexString(pixels1));
-//            System.out.println(Integer.toHexString(pixels2));
+
             int color = getColorFromPixel(pixels1, pixels2, tilePixelX);
-            pixels[line][screenX] = color;
-//            if (color != 0)
-//                System.out.println("COLOR " + color);
-//            sc.set(screenX, line, color.getRGB());
+//            pixels[line][screenX] = color;
+            sc.set(screenX, line, palette[color].getRGB());
+
         }
 
 

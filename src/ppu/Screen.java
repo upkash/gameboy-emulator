@@ -27,11 +27,10 @@ public class Screen extends JPanel {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-//        frame.addKeyListener(Joypad.getInstance());
     }
 
     public void set(int x, int y, int rgb) {
-        img.setRGB(x, y, rgb);
+        buffer.setRGB(x, y, rgb);
     }
 
     @Override
@@ -41,27 +40,9 @@ public class Screen extends JPanel {
         g2.drawImage(img, null, null);
     }
 
-    public void renderFrame(int[][] screen) {
-
-        for (int y = 0; y < 144; y++) {
-            for (int x = 0; x < 160; x++) {
-                buffer.setRGB(x, y,  palette[screen[y][x]].getRGB());
-            }
-        }
+    public void renderFrame() {
         Graphics2D g2 = img.createGraphics();
         g2.drawImage(buffer, 0, 0, 160*4, 144*4, null);
         frame.repaint();
     }
-
-    public static void main(String[] args) {
-        int[][] s = new int[160][144];
-        for (int i = 0; i < 160; i++) {
-            for (int j = 0; j < 144; j++) {
-                s[i][j] = 2;
-            }
-        }
-        Screen sc = new Screen();
-        sc.renderFrame(s);
-    }
-
 }

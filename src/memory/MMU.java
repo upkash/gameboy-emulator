@@ -1,8 +1,5 @@
 package memory;
 
-import ppu.Tile;
-import ppu.TileMapContainer;
-import ppu.TileSet;
 import java.io.*;
 
 
@@ -51,10 +48,6 @@ public class MMU  {
     private final int[] hram;
     private final int[] wrams;
 
-    private final TileSet tileSet;
-
-    private final TileMapContainer tileMaps;
-
 
     public MMU(String romPath) {
         wram = new int[0x2000];
@@ -70,8 +63,6 @@ public class MMU  {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        tileSet = new TileSet();
-        tileMaps = new TileMapContainer(tileSet);
     }
 
     private int[] loadRom(String fileName) throws IOException {
@@ -103,13 +94,8 @@ public class MMU  {
             case 0x6000:
             case 0x7000:
             case 0x8000:
-//                tileSet.setTileVal(address, value);
             case 0x9000:
-                System.out.println("WRITING TO VRAM ADDR " + Integer.toHexString(address) + " VALUE " + Integer.toHexString(value));
                 vram[address & 0x1FFF] = value;
-//                if (address >= 0x9800 && address <= 0x9FFF) {
-//                    tileMaps.updateTileMap(address, value);
-//                }
                 break;
             case 0xA000:
             case 0xB000:
@@ -146,7 +132,6 @@ public class MMU  {
     }
 
     public int readByte(int address) {
-//        System.out.println(Integer.toHexString(address));
         switch (address & 0xf000) {
             case 0x0000:
             case 0x0100:
@@ -273,13 +258,11 @@ public class MMU  {
         return true;
     }
 
-
-
-    public Tile getTile(int address) {
-        return tileSet.getTile(address);
+    public int getScrollX() {
+        return readByte(0xFF42);
     }
 
-    public Tile getTileFromIndex(int idx) {
-        return tileSet.getTileFromIndex(idx);
+    public int getScrollY() {
+        return readByte(0xFF43);
     }
 }

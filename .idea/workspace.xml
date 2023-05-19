@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="partially working screen, too small, and text from test is on top of screen not bottom">
+    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="rescaled frame">
+      <change afterPath="$PROJECT_DIR$/src/cpu_instrs/individual/Tetris.gb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/GameBoy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/GameBoy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory/MMU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ppu/PPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/PPU.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ppu/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/Screen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -48,6 +52,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual",
     "onboarding.tips.debug.path": "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/Main.java",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
@@ -56,6 +61,9 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/cpu_instrs/individual" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src" />
@@ -319,7 +327,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684465065591</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="rescaled frame">
+      <created>1684468654239</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1684468654239</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -350,7 +365,8 @@
     <MESSAGE value="About to implements interrupts" />
     <MESSAGE value="Skipping the interrupts to work on ppu" />
     <MESSAGE value="partially working screen, too small, and text from test is on top of screen not bottom" />
-    <option name="LAST_COMMIT_MESSAGE" value="partially working screen, too small, and text from test is on top of screen not bottom" />
+    <MESSAGE value="rescaled frame" />
+    <option name="LAST_COMMIT_MESSAGE" value="rescaled frame" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

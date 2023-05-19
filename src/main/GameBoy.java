@@ -12,6 +12,7 @@ public class GameBoy implements Runnable {
         ppu = new PPU(mmu);
         cpu = new CPU(mmu);
         mmu.writeByte(0xFF40, 0x91);
+//        System.out.println(mmu.readByte(0xFF40));
     }
 
     public void run() {
@@ -22,7 +23,7 @@ public class GameBoy implements Runnable {
     }
 
     public static void main(String[] args) {
-        GameBoy gb = new GameBoy("/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/09-op r,r.gb");
+        GameBoy gb = new GameBoy("/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual/06-ld r,r.gb");
         gb.run();
     }
 }
