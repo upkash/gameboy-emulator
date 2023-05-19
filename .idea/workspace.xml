@@ -4,19 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Skipping the interrupts to work on ppu">
-      <change afterPath="$PROJECT_DIR$/src/ppu/PPUMode.java" afterDir="false" />
+    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="partially working screen, too small, and text from test is on top of screen not bottom">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/CPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gpu/GPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/PPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gpu/Pallette.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/Pallette.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gpu/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/Screen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gpu/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/Tile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gpu/TileMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/TileMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gpu/TileMapContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/TileMapContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gpu/TileSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/TileSet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/GameBoy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/GameBoy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory/MMU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ppu/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/Screen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -322,7 +312,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684361138638</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="partially working screen, too small, and text from test is on top of screen not bottom">
+      <created>1684465065591</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1684465065591</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -352,7 +349,8 @@
     <MESSAGE value="Fixed pop af" />
     <MESSAGE value="About to implements interrupts" />
     <MESSAGE value="Skipping the interrupts to work on ppu" />
-    <option name="LAST_COMMIT_MESSAGE" value="Skipping the interrupts to work on ppu" />
+    <MESSAGE value="partially working screen, too small, and text from test is on top of screen not bottom" />
+    <option name="LAST_COMMIT_MESSAGE" value="partially working screen, too small, and text from test is on top of screen not bottom" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

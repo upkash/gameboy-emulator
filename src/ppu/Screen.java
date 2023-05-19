@@ -3,9 +3,9 @@ package ppu;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.VolatileImage;
 
 public class Screen extends JPanel {
+    private final BufferedImage buffer;
     private final BufferedImage img;
     private JFrame frame;
     private final Color[] palette = {
@@ -17,13 +17,14 @@ public class Screen extends JPanel {
 
     public Screen() {
         frame = new JFrame("gb");
-        img = new BufferedImage((160 * 4), (144 * 4), BufferedImage.TYPE_INT_RGB);
+        buffer = new BufferedImage(160, 144, BufferedImage.TYPE_INT_RGB);
+        img = new BufferedImage(160*4, 144*4, BufferedImage.TYPE_INT_RGB);
         ImageIcon icon = new ImageIcon( img );
         frame.setSize((160 * 4) + 6, (144 * 4) + 34);
         frame.add(new JLabel(icon));
         frame.pack();
         frame.setVisible(true);
-        frame.setResizable(true);
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 //        frame.addKeyListener(Joypad.getInstance());
@@ -41,17 +42,14 @@ public class Screen extends JPanel {
     }
 
     public void renderFrame(int[][] screen) {
-        for (int x = 0; x < 144; x++) {
-            for (int y = 0; y < 160; y++) {
-                System.out.println(x+ " " + y);
-                img.setRGB(y, x, palette[screen[x][y]].getRGB());
+
+        for (int y = 0; y < 144; y++) {
+            for (int x = 0; x < 160; x++) {
+                buffer.setRGB(x, y,  palette[screen[y][x]].getRGB());
             }
         }
-
-//        Graphics2D g2 = canvas.createGraphics();
-//        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-//        g2.drawImage(img, 0, 0, 160*2, 144*2, null);
-
+        Graphics2D g2 = img.createGraphics();
+        g2.drawImage(buffer, 0, 0, 160*4, 144*4, null);
         frame.repaint();
     }
 
