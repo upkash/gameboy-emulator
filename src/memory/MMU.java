@@ -1,8 +1,8 @@
 package memory;
 
-import gpu.Tile;
-import gpu.TileMapContainer;
-import gpu.TileSet;
+import ppu.Tile;
+import ppu.TileMapContainer;
+import ppu.TileSet;
 import java.io.*;
 
 
@@ -105,6 +105,7 @@ public class MMU  {
             case 0x8000:
 //                tileSet.setTileVal(address, value);
             case 0x9000:
+                System.out.println("WRITING TO VRAM ADDR " + Integer.toHexString(address) + " VALUE " + Integer.toHexString(value));
                 vram[address & 0x1FFF] = value;
 //                if (address >= 0x9800 && address <= 0x9FFF) {
 //                    tileMaps.updateTileMap(address, value);
@@ -185,29 +186,94 @@ public class MMU  {
         return readByte(0xFFFF);
     }
 
-    public void setIFBitZero(int bit) {
+    public void unSetIFBit(int bit) {
         int iF = getIF();
         iF = iF & ~(1 << bit);
         writeByte(0xFF0F, iF);
     }
 
-    public void setIEBitZero(int bit) {
+    public void unSetIEBit(int bit) {
         int iE = getIE();
         iE = iE & ~(1 << bit);
         writeByte(0xFFFF, iE);
     }
 
-    public void setIFBitOne(int bit) {
+    public void setIFBit(int bit) {
         int iF = getIF();
         iF = iF | (1 << bit);
         writeByte(0xFF0F, iF);
     }
 
-    public void setIEBitOne(int bit) {
+    public void setIEBit(int bit) {
         int iE = getIE();
         iE = iE | (1 << bit);
         writeByte(0xFFFF, iE);
     }
+
+    public int getStat() {
+        return readByte(0xFF41);
+    }
+
+    public int getStatBit(int bit) {
+        return 0;
+    }
+
+    public void setStatBit(int bit) {
+        int stat = getStat();
+        stat = stat | (1 << bit);
+        writeByte(0xFF41, stat);
+    }
+
+    public void unSetStatBit(int bit) {
+        int stat = getStat();
+        stat = stat & ~(1 << bit);
+        writeByte(0xFF41, stat);
+    }
+
+    public int getLYComp() {
+        return readByte(0xFF45);
+    }
+
+    public void setLYComp(int value) {
+        writeByte(0xFF45, value);
+    }
+
+    public int getLY() {
+        return readByte(0xFF44);
+    }
+
+    public void setLY(int value) {
+        writeByte(0xFF44, value);
+    }
+
+    public boolean displayEnabled() {
+        return (readByte(0xFF40) >> 7) == 1;
+    }
+    public boolean windowTileMap() {
+        return ((readByte(0xFF40) >> 6) & 0x01) == 1;
+    }
+    public boolean windowEnabled() {
+        return ((readByte(0xFF40) >> 5) & 0x01) == 1;
+    }
+    public boolean bgWindowTileData() {
+        return ((readByte(0xFF40) >> 4) & 0x01) == 1;
+    }
+    public boolean bgTileMapDisplay() {
+        return ((readByte(0xFF40) >> 3) & 0x01) == 1;
+    }
+    public boolean spriteSize() {
+        return ((readByte(0xFF40) >> 2) & 0x01) == 1;
+    }
+    public boolean spritesEnabled() {
+        return ((readByte(0xFF40) >> 1) & 0x01) == 1;
+    }
+    public boolean bgEnabled() {
+//        System.out.println(readByte(0xFF40 & 0x01));
+//        return readByte(0xFF40 & 0x01) == 1;
+        return true;
+    }
+
+
 
     public Tile getTile(int address) {
         return tileSet.getTile(address);

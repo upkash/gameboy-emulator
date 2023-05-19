@@ -1,4 +1,4 @@
-package gpu;
+package ppu;
 
 public class TileMap {
     private TileSet tileSet;

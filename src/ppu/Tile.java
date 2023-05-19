@@ -1,4 +1,4 @@
-package gpu;
+package ppu;
 
 public class Tile {
     private final int[][] pixels;

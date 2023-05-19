@@ -665,7 +665,7 @@ public class CPU {
                             String.format("%02X", mmu.readByte(pc.read()+1))+ "," +
                             String.format("%02X", mmu.readByte(pc.read()+2))+ "," +
                             String.format("%02X", mmu.readByte(pc.read()+3));
-        System.out.println(out);
+//        System.out.println(out);
 
         boolean branchTaken = false;
         int d1 = opCode >> 4;
@@ -1276,7 +1276,7 @@ public class CPU {
     private boolean handleInterrupt(int bit, int interruptVector, int fired) {
         if (((fired >> bit) & 0x01) == 0) return false;
 
-        mmu.setIFBitZero(bit);
+        mmu.unSetIFBit(bit);
         pc.set(interruptVector);
         interruptsEnabled = false;
         return true;

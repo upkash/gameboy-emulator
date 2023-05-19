@@ -1,4 +1,4 @@
-package gpu;
+package ppu;
 
 public class TileMapContainer {
     private final TileMap tileMap0;

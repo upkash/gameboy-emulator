@@ -4,16 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="About to implements interrupts">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/GameBoy.java" afterDir="false" />
+    <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="Skipping the interrupts to work on ppu">
+      <change afterPath="$PROJECT_DIR$/src/ppu/PPUMode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gameboy-doctor/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/gameboy-doctor/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Gameboy.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/CPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gpu/GPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gpu/GPU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gpu/GPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/PPU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gpu/Pallette.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/Pallette.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gpu/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/Screen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gpu/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/Tile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gpu/TileMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/TileMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gpu/TileMapContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/TileMapContainer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gpu/TileSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ppu/TileSet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/GameBoy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/GameBoy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory/MMU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/CPUTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/CPUTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,6 +107,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Screen" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ppu.Screen" />
+      <module name="GameBoyEmulator" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ppu.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="CPUTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="GameBoyEmulator" />
       <extension name="coverage">
@@ -119,29 +135,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CPUTest.op_sp_hl" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="GameBoyEmulator" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="tests.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="tests" />
-      <option name="MAIN_CLASS_NAME" value="tests.CPUTest" />
-      <option name="METHOD_NAME" value="op_sp_hl" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.GameBoy" />
+        <item itemvalue="Application.Screen" />
         <item itemvalue="JUnit.CPUTest" />
         <item itemvalue="Application.Gameboy" />
         <item itemvalue="Application.CPU" />
-        <item itemvalue="JUnit.CPUTest.op_sp_hl" />
       </list>
     </recent_temporary>
   </component>
@@ -315,11 +315,29 @@
       <option name="project" value="LOCAL" />
       <updated>1684301735844</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Skipping the interrupts to work on ppu">
+      <created>1684361138638</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1684361138638</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.log" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First commit CPU and MMU partially implemented" />
@@ -333,7 +351,8 @@
     <MESSAGE value="Implemented DAA" />
     <MESSAGE value="Fixed pop af" />
     <MESSAGE value="About to implements interrupts" />
-    <option name="LAST_COMMIT_MESSAGE" value="About to implements interrupts" />
+    <MESSAGE value="Skipping the interrupts to work on ppu" />
+    <option name="LAST_COMMIT_MESSAGE" value="Skipping the interrupts to work on ppu" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
