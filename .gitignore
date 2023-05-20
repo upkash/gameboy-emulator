@@ -33,3 +33,6 @@ gameboy-doctor/*
 src/*.gb
 
 cpu_instrs/*
+
+src/main/java/cpu_instrs
+src/main/java/cpu_instrs/*

@@ -1,7 +1,6 @@
 package emulator.cpu;
 
 import emulator.memory.MMU;
-
 public class CPU {
 
     // GP registers, stack pointers, prog. counter, register pairings

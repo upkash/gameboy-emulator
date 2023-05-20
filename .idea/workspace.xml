@@ -5,23 +5,72 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="fixed scrolling">
-      <change afterPath="$PROJECT_DIR$/src/emulator/cpu_instrs/individual/Tetris.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/emulator/ppu/PPUHead.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/emulator/ppu/PPUHeadless.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/cpu_instrs.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/01-special.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/02-interrupts.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/03-op sp,hl.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/04-op r,imm.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/05-op rp.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/06-ld r,r.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/07-jr,jp,call,ret,rst.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/08-misc instrs.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/09-op r,r.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/10-bit ops.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/11-op a,(hl).gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/Tetris.gb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/01-special.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/02-interrupts.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/03-op sp,hl.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/04-op r,imm.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/05-op rp.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/06-ld r,r.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/07-jr,jp,call,ret,rst.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/08-misc instrs.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/09-op r,r.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/10-bit ops.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/11-op a,(hl).s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/apu.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/build_gbs.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/build_rom.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/checksums.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/console.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/console.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/cpu_speed.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/crc.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/crc_fast.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/delay.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/gb.inc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/instr_test.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/macros.inc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/multi_custom.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/numbers.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/printing.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/runtime.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/testing.s" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/linkfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/shell.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameBoyEmulator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/GameBoyEmulator.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameboy-doctor/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/gameboy-doctor/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameboy-doctor/gameboy-doctor" beforeDir="false" afterPath="$PROJECT_DIR$/gameboy-doctor/gameboy-doctor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/cpu/CPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpu/Flags.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/cpu/Flags.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpu/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/cpu/Register.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpu/RegisterPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/cpu/RegisterPair.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpu/SpecialRegister.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/cpu/SpecialRegister.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/GameBoy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/main/GameBoy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/memory/MMU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ppu/PPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/ppu/PPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ppu/PPUMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/ppu/PPUMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ppu/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/ppu/Screen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/CPUTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/emulator/tests/CPUTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/cpu/CPU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/cpu/Flags.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/cpu/Flags.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/cpu/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/cpu/Register.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/cpu/RegisterPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/cpu/RegisterPair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/cpu/SpecialRegister.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/cpu/SpecialRegister.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/main/GameBoy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/main/GameBoy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/memory/MMU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/ppu/PPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/ppu/PPUHead.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUHead.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/ppu/PPUHeadless.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUHeadless.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/ppu/PPUMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUMode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/ppu/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/Screen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/emulator/tests/CPUTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,16 +112,19 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/cpu_instrs/individual",
-    "onboarding.tips.debug.path": "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/Main.java",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
+    "jdk.selected.JAVA_MODULE": "10",
+    "last_directory_selection": "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/test",
+    "last_opened_file_path": "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/test/java",
+    "onboarding.tips.debug.path": "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/src/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.21505374",
+    "project.structure.side.proportion": "0.11507481",
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/java/" />
       <recent name="$PROJECT_DIR$/src/cpu_instrs/individual" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -80,21 +132,7 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.GameBoy">
-    <configuration name="CPU" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <output_file path="output.txt" is_save="true" />
-      <option name="MAIN_CLASS_NAME" value="emulator.cpu.CPU" />
-      <module name="GameBoyEmulator" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="emulator.cpu.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.CPUTest.op_a_hl">
     <configuration name="GameBoy" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <output_file path="output.txt" is_save="true" />
       <option name="MAIN_CLASS_NAME" value="emulator.main.GameBoy" />
@@ -105,13 +143,6 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Gameboy" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="main.Gameboy" />
-      <module name="GameBoyEmulator" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -129,28 +160,45 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CPUTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="main.java.emulator.main.GameBoy" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="main.java.emulator.main.GameBoy" />
       <module name="GameBoyEmulator" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="emulator.tests.*" />
+          <option name="PATTERN" value="main.java.emulator.main.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="tests" />
-      <option name="MAIN_CLASS_NAME" value="emulator.tests.CPUTest" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CPUTest (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GameBoyEmulator" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="CPUTest" />
       <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CPUTest.op_a_hl" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="GameBoyEmulator" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="CPUTest" />
+      <option name="METHOD_NAME" value="op_a_hl" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.CPUTest.op_a_hl" />
+        <item itemvalue="JUnit.CPUTest (1)" />
         <item itemvalue="Application.GameBoy" />
+        <item itemvalue="Application.main.java.emulator.main.GameBoy" />
         <item itemvalue="Application.Screen" />
-        <item itemvalue="JUnit.CPUTest" />
-        <item itemvalue="Application.Gameboy" />
-        <item itemvalue="Application.CPU" />
       </list>
     </recent_temporary>
   </component>
@@ -359,7 +407,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684474687738</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="fixed scrolling">
+      <created>1684532619614</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1684532619615</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -401,6 +456,11 @@
           <properties class="java.lang.ArrayIndexOutOfBoundsException" package="java.lang" />
           <option name="timeStamp" value="19" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/src/Main.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>

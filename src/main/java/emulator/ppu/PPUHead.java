@@ -1,5 +1,4 @@
 package emulator.ppu;
-
 import emulator.memory.MMU;
 
 import java.awt.*;
