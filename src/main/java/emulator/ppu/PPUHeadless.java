@@ -1,9 +1,8 @@
 package emulator.ppu;
-
 import emulator.memory.MMU;
 
 public class PPUHeadless extends PPU {
-    private final int[][] pixels;
+    protected final int[][] pixels;
     public PPUHeadless(MMU mmu) {
         super(mmu);
         pixels = new int[144][160];
@@ -42,8 +41,7 @@ public class PPUHeadless extends PPU {
                     cycleCounter %= CLOCKS_PER_SCANLINE;
 
                     if (scanLine == 154) {
-//                        sc.renderFrame();
-                        printFrame();
+                        sendFrame();
                         scanLine = 0;
                         mmu.setLY(scanLine);
                         mode = PPUMode.ACCESS_OAM;
@@ -149,8 +147,6 @@ public class PPUHeadless extends PPU {
 
             int color = getColorFromPixel(pixels1, pixels2, tilePixelX);
             pixels[line][screenX] = color;
-//            sc.set(screenX, line, palette[color].getRGB());
-
         }
     }
 
@@ -159,7 +155,7 @@ public class PPUHeadless extends PPU {
 
     }
 
-    private void printFrame() {
+    protected void sendFrame() {
         System.out.println("NEW FRAME");
         String out = "";
         for (int y = 0; y < 144; y ++) {
@@ -169,4 +165,6 @@ public class PPUHeadless extends PPU {
 
         System.out.println(out);
     }
+
+
 }

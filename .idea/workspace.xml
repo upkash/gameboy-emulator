@@ -5,9 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="fixed scrolling">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/cpu_instrs.gb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/01-special.gb" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/02-interrupts.gb" afterDir="false" />
@@ -52,25 +49,14 @@
       <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/testing.s" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/linkfile" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/shell.inc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameBoyEmulator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/GameBoyEmulator.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameboy-doctor/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/gameboy-doctor/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameboy-doctor/gameboy-doctor" beforeDir="false" afterPath="$PROJECT_DIR$/gameboy-doctor/gameboy-doctor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/cpu/CPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/cpu/CPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/cpu/Flags.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/cpu/Flags.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/cpu/Register.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/cpu/Register.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/cpu/RegisterPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/cpu/RegisterPair.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/cpu/SpecialRegister.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/cpu/SpecialRegister.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/main/GameBoy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/main/GameBoy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/memory/MMU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/memory/MMU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/ppu/PPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/ppu/PPUHead.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUHead.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/ppu/PPUHeadless.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUHeadless.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/ppu/PPUMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/ppu/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/Screen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/emulator/tests/CPUTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUHead.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUHead.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUHeadless.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUHeadless.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,26 +88,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "jdk.selected.JAVA_MODULE": "10",
-    "last_directory_selection": "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/test",
-    "last_opened_file_path": "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/test/java",
-    "onboarding.tips.debug.path": "/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/src/Main.java",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.21505374",
-    "project.structure.side.proportion": "0.11507481",
-    "settings.editor.selected.configurable": "preferences.keymap"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;10&quot;,
+    &quot;last_directory_selection&quot;: &quot;/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/test&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/test/java&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;/Users/utkarsh/IdeaProjects/GameBoyEmulator/src/src/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.21505374&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.11507481&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/test/java/" />
@@ -414,7 +400,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684532619615</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="fixed scrolling">
+      <created>1684547661439</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1684547661439</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="UnknownFeatures">

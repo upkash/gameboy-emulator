@@ -2,6 +2,7 @@ package emulator.ppu;
 
 import emulator.memory.MMU;
 
+import java.awt.*;
 
 
 public abstract class PPU  {
@@ -25,6 +26,13 @@ public abstract class PPU  {
     protected int scanLine;
     protected PPUMode mode = PPUMode.ACCESS_OAM;
     protected int cycleCounter;
+
+    protected final Color[] palette = {
+            new Color(224, 248, 208),
+            new Color(136, 192, 112),
+            new Color(52,104,86),
+            new Color(8, 24, 32)
+    };
 
     public PPU(MMU mmu) {
         this.mmu = mmu;

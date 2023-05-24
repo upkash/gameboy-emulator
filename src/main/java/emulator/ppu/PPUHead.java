@@ -1,16 +1,7 @@
 package emulator.ppu;
 import emulator.memory.MMU;
 
-import java.awt.*;
-
 public class PPUHead extends PPU {
-    protected final Color[] palette = {
-            new Color(224, 248, 208),
-            new Color(136, 192, 112),
-            new Color(52,104,86),
-            new Color(8, 24, 32)
-    };
-
     private final Screen sc;
     public PPUHead(MMU mmu) {
         super(mmu);
@@ -50,7 +41,7 @@ public class PPUHead extends PPU {
                     cycleCounter %= CLOCKS_PER_SCANLINE;
 
                     if (scanLine == 154) {
-                        sc.renderFrame();
+                        renderFrame();
                         scanLine = 0;
                         mmu.setLY(scanLine);
                         mode = PPUMode.ACCESS_OAM;
@@ -166,5 +157,9 @@ public class PPUHead extends PPU {
     @Override
     protected void drawWindowLine(int line) {
 
+    }
+
+    protected void renderFrame() {
+        sc.renderFrame();
     }
 }
