@@ -5,58 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="34f12790-bd73-4012-a097-856e892c1e8f" name="Changes" comment="fixed scrolling">
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/cpu_instrs.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/01-special.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/02-interrupts.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/03-op sp,hl.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/04-op r,imm.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/05-op rp.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/06-ld r,r.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/07-jr,jp,call,ret,rst.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/08-misc instrs.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/09-op r,r.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/10-bit ops.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/11-op a,(hl).gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/individual/Tetris.gb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/01-special.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/02-interrupts.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/03-op sp,hl.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/04-op r,imm.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/05-op rp.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/06-ld r,r.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/07-jr,jp,call,ret,rst.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/08-misc instrs.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/09-op r,r.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/10-bit ops.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/11-op a,(hl).s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/apu.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/build_gbs.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/build_rom.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/checksums.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/console.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/console.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/cpu_speed.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/crc.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/crc_fast.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/delay.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/gb.inc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/instr_test.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/macros.inc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/multi_custom.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/numbers.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/printing.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/runtime.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/common/testing.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/linkfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cpu_instrs/source/shell.inc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameBoyEmulator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/GameBoyEmulator.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameboy-doctor/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/gameboy-doctor/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameboy-doctor/gameboy-doctor" beforeDir="false" afterPath="$PROJECT_DIR$/gameboy-doctor/gameboy-doctor" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPU.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUHead.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUHead.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUHeadless.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/emulator/ppu/PPUHeadless.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

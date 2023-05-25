@@ -22,12 +22,6 @@
             <scope>compile</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.kurento</groupId>
-            <artifactId>kurento-client</artifactId>
-            <version>6.16.1</version>
-        </dependency>
-
     </dependencies>
 
 </project>
