@@ -112,7 +112,12 @@ public class MMU  {
                 throw new IndexOutOfBoundsException();
             case 0xF000:
                 if (address >= 0xFE00 && address <= 0xFE9F) oam[address & 0x00FF] = value;
-                else if (address < 0xFF4C) io[address - 0xFF00] = value;
+                else if (address <= 0xFEFF) {
+                    return;
+                }
+                else if (address <= 0xFF7F) {
+                    io[address - 0xFF00] = value;
+                }
                 else if (address <= 0xFFFF) hram[address - 0xFF80] = value;
                 else {
                     throw new IndexOutOfBoundsException();
@@ -153,10 +158,21 @@ public class MMU  {
                 return wram[address & 0x1FFF];
             case 0xE000:
             case 0xF000:
-                if (address <= 0xFDFF) return wrams[address & 0x1FFF];
-                else if (address <= 0xFE9F) return oam[address & 0x00FF];
-                else if (address < 0xFF4C) return io[address - 0xFF00];
-                else if (address <= 0xFFFF) return hram[address - 0xFF80];
+                if (address <= 0xFDFF) {
+                    return wrams[address & 0x1FFF];
+                }
+                else if (address <= 0xFE9F) {
+                    return oam[address & 0x00FF];
+                }
+                else if (address <= 0xFEFF) {
+                    return 0xFF;
+                }
+                else if (address <= 0xFF7F) {
+                    return io[address - 0xFF00];
+                }
+                else if (address <= 0xFFFF) {
+                    return hram[address - 0xFF80];
+                }
                 else throw new IndexOutOfBoundsException();
 
         }
@@ -258,11 +274,19 @@ public class MMU  {
         return true;
     }
 
-    public int getScrollX() {
+    public int getScrollY() {
         return readByte(0xFF42);
     }
 
-    public int getScrollY() {
+    public int getScrollX() {
         return readByte(0xFF43);
+    }
+
+    public int getWindowX() {
+        return readByte(0xFF4A);
+    }
+
+    public int getWindowY() {
+        return readByte(0xFF4B);
     }
 }
